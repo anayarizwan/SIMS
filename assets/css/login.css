@@ -1,0 +1,125 @@
+:root {
+  --color-1: #0f172a;
+  --color-2: #6366f1;
+  --color-3: #f1f5f9;
+  --color-4: #ffffff;
+  --color-5: #475569;
+
+  --f1: "DM Serif Display", serif;
+  --f2: "Inter", sans-serif;
+}
+body {
+  background-color: var(--color-3);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+}
+.login-container {
+  padding: 20px 0;
+  text-align: center;
+  border-radius: 6px;
+  background-color: var(--color-4);
+  box-shadow: 3px 3px 3px #47556917;
+}
+.login-container h2 {
+  font-family: var(--f1);
+  font-weight: 500;
+  color: var(--color-1);
+}
+.login-container span {
+  font-family: var(--f2);
+  font-size: 12px;
+}
+.login-container form {
+  padding: 20px;
+  width: 350px;
+}
+.login-container form .input {
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+}
+.login-container form input {
+  padding: 10px 33px;
+  border: 1px solid #e2e8f0;
+  outline: none;
+  width: 330px;
+}
+.login-container form input:focus {
+  box-shadow: 0 0 0 2px rgba(99, 101, 241, 0.059);
+}
+
+.login-container form .input .email {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  position: relative;
+}
+.login-container form .input .email .fa-envelope {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  color: var(--color-1);
+}
+.login-container form .input .password {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  position: relative;
+}
+.login-container form .input .password .fa-lock {
+  position: absolute;
+  bottom: 11px;
+  left: 10px;
+  color: var(--color-1);
+}
+.login-container form .input .password .fa-eye {
+  position: absolute;
+  bottom: 9px;
+  right: 10px;
+  font-weight: 400;
+  color: #0f172aac;
+}
+.login-container form .checkbox {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  padding: 12px 0;
+  font-size: 14px;
+  color: var(--color-5);
+}
+.login-container form .checkbox input {
+  height: 13px;
+  width: 13px;
+}
+.login-container form button {
+  padding: 10px;
+  text-transform: uppercase;
+  background-color: var(--color-2);
+  border: none;
+  color: var(--color-3);
+  width: 310px;
+  border-radius: 4px;
+  font-family: var(--f2);
+  font-weight: 500;
+  cursor: pointer;
+}
+.login-container form .input .password .fa-eye-slash {
+  position: absolute;
+  bottom: 9px;
+  right: 10px;
+  font-weight: 400;
+  color: #0f172aac;
+  cursor: pointer;
+}
+.login-container form p {
+  padding-top: 15px;
+}
+.login-container form p a:hover {
+  color: var(--color-2);
+}

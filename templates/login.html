@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale = 1.0, user-scalable = no"
+    />
+    <script
+      src="https://kit.fontawesome.com/1f15ce75ba.js"
+      crossorigin="anonymous"
+    ></script>
+    <title>Login Page</title>
+    <link rel="stylesheet" href="/assets/css/style.css" />
+    <link rel="stylesheet" href="/assets/css/login.css" />
+  </head>
+  <body>
+    <!-- login============================================================================================= -->
+    <div class="login-container">
+      <h2>Login Form</h2>
+      <span>Stock & Inventory Management System</span>
+      <form action="#" id="form">
+        <div class="input">
+          <div class="email">
+            <i class="fa-regular fa-envelope"></i>
+            <input
+              type="text"
+              id="user"
+              placeholder="username/Email"
+              required
+            />
+          </div>
+          <div class="password">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" placeholder="password" id="password" /><i
+              class="fa-regular fa-eye"
+              id="eye"
+            ></i>
+          </div>
+        </div>
+        <div class="checkbox">
+          <input type="checkbox" /><label for="#">Remember me</label>
+        </div>
+        <button type="submit">SIGN IN</button>
+        <p id="errorMessage"></p>
+        <p>Don't have an account <a href="#">Create One</a></p>
+      </form>
+    </div>
+  </body>
+  <script>
+    let form = document.getElementById("form");
+    let eye = document.getElementById("eye");
+    let password = document.getElementById("password");
+    let user = document.getElementById("user");
+    let errorMessage = document.getElementById("errorMessage");
+// eye open close
+    eye.addEventListener("click", () => {
+      if (password.type === "password") {
+        password.type = "text";
+        eye.classList.remove("fa-eye");
+        eye.classList.add("fa-eye-slash");
+      } else {
+        password.type = "password";
+        eye.classList.remove("fa-eye-slash");
+        eye.classList.add("fa-eye");
+      }
+    });
+// form submit and error message
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (user.value.trim() === "" || password.value === "") {
+        errorMessage.innerHTML = "Invalid Credentials";
+        errorMessage.style.color = "red";
+      }
+
+      if (user.value.includes("@") && !user.value.includes(".")) {
+        errorMessage.innerHTML = "Invalid email";
+        errorMessage.style.color = "red";
+      } else {
+        errorMessage.innerHTML = "Valid Caradentials";
+        errorMessage.style.color = "green";
+      }
+    });
+  </script>
+</html>
