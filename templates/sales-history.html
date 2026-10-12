@@ -1,0 +1,690 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  >
+
+  <script
+    src="https://kit.fontawesome.com/1f15ce75ba.js"
+    crossorigin="anonymous"
+  ></script>
+
+  <title>Sales History - SIMS</title>
+
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/dashboard.css') }}"
+  >
+
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/sales-history.css') }}"
+  >
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+
+    <button
+      type="button"
+      class="close-btn"
+      id="closeBtn"
+      aria-label="Close sidebar"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+
+    <div class="brand">
+      <h1>SIMS</h1>
+      <p>Smart and Inventory Management System</p>
+    </div>
+
+    <ul class="nav-menu">
+      <li class="nav-item">
+        <a href="/dashboard">
+          <i class="fa-solid fa-chart-pie"></i>
+          Dashboard
+        </a>
+      </li>
+    </ul>
+
+    <div class="nav-section">Inventory</div>
+
+    <ul class="nav-menu">
+      <li class="nav-item">
+        <a href="/products">
+          <i class="fa-solid fa-box"></i>
+          Products
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="/categories">
+          <i class="fa-solid fa-tags"></i>
+          Categories
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="/stock">
+          <i class="fa-solid fa-warehouse"></i>
+          Stock
+        </a>
+      </li>
+    </ul>
+
+    <div class="nav-section">Sales</div>
+
+    <ul class="nav-menu">
+      <li class="nav-item">
+        <a href="/sales">
+          <i class="fa-solid fa-cart-plus"></i>
+          New Sale
+        </a>
+      </li>
+
+      <li class="nav-item active">
+        <a href="/sales-history">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          Sales History
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="/customers">
+          <i class="fa-solid fa-users"></i>
+          Customers
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="/settings">
+          <i class="fa-solid fa-gear"></i>
+          Settings
+        </a>
+      </li>
+    </ul>
+
+    <a href="/login" class="logout-btn">
+      <i class="fa-solid fa-right-from-bracket"></i>
+      Logout
+    </a>
+
+  </aside>
+
+  <!-- MAIN WRAPPER -->
+  <div class="main-wrapper">
+
+    <!-- TOP HEADER -->
+    <header class="top-header">
+
+      <button
+        class="menu-btn"
+        id="menuBtn"
+        type="button"
+        aria-label="Open sidebar"
+      >
+        <i class="fa-solid fa-ellipsis-vertical"></i>
+      </button>
+
+      <div class="header-page-info">
+        <span class="header-label">SALES</span>
+        <h1>Sales History</h1>
+        <p>View and manage completed sales</p>
+      </div>
+
+      <div class="user-profile">
+
+        <button class="icon-btn" type="button" aria-label="Notifications">
+          <i class="fa-regular fa-bell"></i>
+        </button>
+
+        <div class="avatar-circle">
+          {{ full_name[0].upper() }}
+        </div>
+
+        <div class="user-info">
+          <span class="user-name">{{ full_name }}</span>
+          <span class="user-role">Administrator</span>
+        </div>
+
+      </div>
+
+    </header>
+
+    <!-- CONTENT -->
+    <main class="content-area sales-history-content">
+
+      <!-- PAGE HEADER -->
+      <div class="sales-history-page-header">
+
+        <div>
+          <span class="page-eyebrow">SALES MANAGEMENT</span>
+
+          <h2>Sales History</h2>
+
+          <p>
+            Review completed transactions, revenue and customer purchases.
+          </p>
+        </div>
+
+        <a href="/sales" class="new-sale-btn">
+          <i class="fa-solid fa-plus"></i>
+          New Sale
+        </a>
+
+      </div>
+
+      <!-- SALES STATS -->
+      <section class="history-stats">
+
+        <div class="history-stat-card">
+          <div class="history-stat-icon">
+            <i class="fa-solid fa-receipt"></i>
+          </div>
+
+          <div class="history-stat-info">
+            <span>Total Sales</span>
+            <strong id="totalSales">0</strong>
+          </div>
+        </div>
+
+        <div class="history-stat-card">
+          <div class="history-stat-icon">
+            <i class="fa-solid fa-chart-line"></i>
+          </div>
+
+          <div class="history-stat-info">
+            <span>Total Revenue</span>
+            <strong id="totalRevenue">0.00</strong>
+          </div>
+        </div>
+
+        <div class="history-stat-card">
+          <div class="history-stat-icon">
+            <i class="fa-solid fa-percent"></i>
+          </div>
+
+          <div class="history-stat-info">
+            <span>Total Discount</span>
+            <strong id="totalDiscount">0.00</strong>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- SALES TABLE -->
+      <section class="sales-history-card">
+
+        <div class="history-card-header">
+          <div>
+            <span>TRANSACTION RECORDS</span>
+            <h3>Completed Sales</h3>
+            <p>All successfully completed customer transactions.</p>
+          </div>
+
+          <div class="history-card-icon">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+          </div>
+        </div>
+
+        <div class="history-count">
+          <i class="fa-solid fa-list"></i>
+          <span id="salesCount">0 sales</span>
+        </div>
+
+        <div class="history-table-wrapper">
+          <table class="history-table">
+
+            <thead>
+              <tr>
+                <th>Sale ID</th>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Subtotal</th>
+                <th>Discount</th>
+                <th>Final Amount</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <tbody id="salesTableBody">
+              <tr>
+                <td colspan="7" class="loading">
+                  <div class="history-loading">
+                    <i class="fa-solid fa-spinner"></i>
+                    <span>Loading sales...</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+
+          </table>
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <!-- SALE DETAILS MODAL -->
+  <div class="modal" id="saleDetailsModal">
+
+    <div class="modal-content">
+
+      <div class="modal-header">
+
+        <div>
+          <span class="modal-eyebrow">TRANSACTION</span>
+          <h2>Sale Details</h2>
+          <p id="saleDetailsInfo">Sale</p>
+        </div>
+
+        <button
+          type="button"
+          class="close-modal-btn"
+          id="closeModalBtn"
+          aria-label="Close sale details"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+
+      </div>
+
+      <!-- SALE INFORMATION -->
+      <div class="sale-info-grid">
+
+        <div class="sale-info-box">
+          <span>Customer</span>
+          <strong id="detailCustomer">-</strong>
+        </div>
+
+        <div class="sale-info-box">
+          <span>Date</span>
+          <strong id="detailDate">-</strong>
+        </div>
+
+        <div class="sale-info-box">
+          <span>Subtotal</span>
+          <strong id="detailSubtotal">0.00</strong>
+        </div>
+
+        <div class="sale-info-box">
+          <span>Discount</span>
+          <strong id="detailDiscount">0.00</strong>
+        </div>
+
+        <div class="sale-info-box final-info">
+          <span>Final Amount</span>
+          <strong id="detailFinalAmount">0.00</strong>
+        </div>
+
+      </div>
+
+      <!-- PURCHASED PRODUCTS -->
+      <div class="details-section-header">
+        <div>
+          <span>SALE ITEMS</span>
+          <h3>Purchased Products</h3>
+        </div>
+
+        <i class="fa-solid fa-cart-shopping"></i>
+      </div>
+
+      <div class="details-table-wrapper">
+        <table class="details-table">
+
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>SKU</th>
+              <th>Quantity</th>
+              <th>Unit Price</th>
+              <th>Subtotal</th>
+            </tr>
+          </thead>
+
+          <tbody id="saleDetailsTableBody"></tbody>
+
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Elements
+    const sidebar = document.getElementById("sidebar");
+    const menuBtn = document.getElementById("menuBtn");
+    const closeSidebarBtn = document.getElementById("closeBtn");
+
+    const salesTableBody = document.getElementById("salesTableBody");
+    const totalSalesElement = document.getElementById("totalSales");
+    const totalRevenueElement = document.getElementById("totalRevenue");
+    const totalDiscountElement = document.getElementById("totalDiscount");
+    const salesCountElement = document.getElementById("salesCount");
+
+    // Modal elements
+    const saleDetailsModal = document.getElementById("saleDetailsModal");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+    const saleDetailsInfo = document.getElementById("saleDetailsInfo");
+
+    const detailCustomer = document.getElementById("detailCustomer");
+    const detailDate = document.getElementById("detailDate");
+    const detailSubtotal = document.getElementById("detailSubtotal");
+    const detailDiscount = document.getElementById("detailDiscount");
+    const detailFinalAmount = document.getElementById("detailFinalAmount");
+
+    const saleDetailsTableBody = document.getElementById(
+      "saleDetailsTableBody"
+    );
+
+    let sales = [];
+
+    // Sidebar
+    function openSidebar() {
+      if (sidebar) {
+        sidebar.classList.add("show");
+      }
+    }
+
+    function closeSidebar() {
+      if (sidebar) {
+        sidebar.classList.remove("show");
+      }
+    }
+
+    if (menuBtn) {
+      menuBtn.addEventListener("click", function (event) {
+        event.stopPropagation();
+        openSidebar();
+      });
+    }
+
+    if (closeSidebarBtn) {
+      closeSidebarBtn.addEventListener("click", function (event) {
+        event.stopPropagation();
+        closeSidebar();
+      });
+    }
+
+    document.addEventListener("click", function (event) {
+      if (
+        sidebar &&
+        menuBtn &&
+        sidebar.classList.contains("show") &&
+        !sidebar.contains(event.target) &&
+        !menuBtn.contains(event.target)
+      ) {
+        closeSidebar();
+      }
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") {
+        closeSidebar();
+        closeSaleDetails();
+      }
+    });
+
+    // Load sales
+    async function loadSales() {
+      try {
+        const response = await fetch("/api/sales");
+
+        if (!response.ok) {
+          throw new Error("Failed to load sales.");
+        }
+
+        const result = await response.json();
+
+        if (!result.success) {
+          throw new Error(result.message || "Failed to load sales.");
+        }
+
+        sales = result.sales || [];
+
+        renderSales();
+        calculateStats();
+
+      } catch (error) {
+        console.error("Sales loading error:", error);
+
+        salesTableBody.innerHTML = `
+          <tr>
+            <td colspan="7" class="empty-state">
+              Failed to load sales.
+            </td>
+          </tr>
+        `;
+
+        totalSalesElement.textContent = "0";
+        totalRevenueElement.textContent = formatMoney(0);
+        totalDiscountElement.textContent = formatMoney(0);
+        salesCountElement.textContent = "0 sales";
+      }
+    }
+
+    // Render sales
+    function renderSales() {
+      salesTableBody.innerHTML = "";
+
+      if (sales.length === 0) {
+        salesTableBody.innerHTML = `
+          <tr>
+            <td colspan="7" class="empty-state">
+              No sales found.
+            </td>
+          </tr>
+        `;
+
+        salesCountElement.textContent = "0 sales";
+        return;
+      }
+
+      sales.forEach(function (sale) {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+          <td><strong>#${escapeHTML(sale.id)}</strong></td>
+          <td>${escapeHTML(sale.customer_name || "Walk-in Customer")}</td>
+          <td>${escapeHTML(formatDate(sale.created_at))}</td>
+          <td>${formatMoney(sale.total_amount)}</td>
+          <td>${formatMoney(sale.discount)}</td>
+          <td><strong>${formatMoney(sale.final_amount)}</strong></td>
+          <td>
+            <button
+              type="button"
+              class="view-btn"
+              data-sale-id="${escapeHTML(sale.id)}"
+            >
+              View Details
+            </button>
+          </td>
+        `;
+
+        salesTableBody.appendChild(row);
+      });
+
+      salesCountElement.textContent = `${sales.length} ${
+        sales.length === 1 ? "sale" : "sales"
+      }`;
+    }
+
+    // Open sale details
+    salesTableBody.addEventListener("click", function (event) {
+      const button = event.target.closest("[data-sale-id]");
+
+      if (button) {
+        viewSaleDetails(button.dataset.saleId);
+      }
+    });
+
+    // Calculate statistics
+    function calculateStats() {
+      const totalSales = sales.length;
+
+      const totalRevenue = sales.reduce(function (total, sale) {
+        return total + Number(sale.final_amount || 0);
+      }, 0);
+
+      const totalDiscount = sales.reduce(function (total, sale) {
+        return total + Number(sale.discount || 0);
+      }, 0);
+
+      totalSalesElement.textContent = totalSales;
+      totalRevenueElement.textContent = formatMoney(totalRevenue);
+      totalDiscountElement.textContent = formatMoney(totalDiscount);
+    }
+
+    // View sale details
+    async function viewSaleDetails(saleId) {
+      try {
+        saleDetailsTableBody.innerHTML = `
+          <tr>
+            <td colspan="5" class="loading">Loading details...</td>
+          </tr>
+        `;
+
+        saleDetailsModal.classList.add("show");
+
+        const response = await fetch(
+          `/api/sales/${encodeURIComponent(saleId)}`
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to load sale details.");
+        }
+
+        const result = await response.json();
+
+        if (!result.success) {
+          throw new Error(
+            result.message || "Failed to load sale details."
+          );
+        }
+
+        const sale = result.sale;
+        const items = result.items || [];
+
+        saleDetailsInfo.textContent = `Sale #${sale.id}`;
+
+        detailCustomer.textContent =
+          sale.customer_name || "Walk-in Customer";
+
+        detailDate.textContent = formatDate(sale.created_at);
+        detailSubtotal.textContent = formatMoney(sale.total_amount);
+        detailDiscount.textContent = formatMoney(sale.discount);
+        detailFinalAmount.textContent = formatMoney(sale.final_amount);
+
+        saleDetailsTableBody.innerHTML = "";
+
+        if (items.length === 0) {
+          saleDetailsTableBody.innerHTML = `
+            <tr>
+              <td colspan="5" class="empty-state">No items found.</td>
+            </tr>
+          `;
+          return;
+        }
+
+        items.forEach(function (item) {
+          const row = document.createElement("tr");
+
+          row.innerHTML = `
+            <td><strong>${escapeHTML(item.product_name)}</strong></td>
+            <td>${escapeHTML(item.sku)}</td>
+            <td>${escapeHTML(item.quantity)}</td>
+            <td>${formatMoney(item.unit_price)}</td>
+            <td>${formatMoney(item.subtotal)}</td>
+          `;
+
+          saleDetailsTableBody.appendChild(row);
+        });
+
+      } catch (error) {
+        console.error("Sale details error:", error);
+
+        saleDetailsTableBody.innerHTML = `
+          <tr>
+            <td colspan="5" class="empty-state">
+              Failed to load sale details.
+            </td>
+          </tr>
+        `;
+      }
+    }
+
+    // Close modal
+    function closeSaleDetails() {
+      if (saleDetailsModal) {
+        saleDetailsModal.classList.remove("show");
+      }
+    }
+
+    if (closeModalBtn) {
+      closeModalBtn.addEventListener("click", closeSaleDetails);
+    }
+
+    if (saleDetailsModal) {
+      saleDetailsModal.addEventListener("click", function (event) {
+        if (event.target === saleDetailsModal) {
+          closeSaleDetails();
+        }
+      });
+    }
+
+    // Format money
+    function formatMoney(value) {
+      return Number(value || 0).toFixed(2);
+    }
+
+    // Format date
+    function formatDate(value) {
+      if (!value) {
+        return "-";
+      }
+
+      const date = new Date(value);
+
+      if (Number.isNaN(date.getTime())) {
+        return String(value);
+      }
+
+      return date.toLocaleString("en-PK", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
+    // Escape HTML
+    function escapeHTML(value) {
+      if (value === null || value === undefined) {
+        return "";
+      }
+
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    // Start
+    document.addEventListener("DOMContentLoaded", function () {
+      loadSales();
+    });
+  </script>
+
+</body>
+</html>

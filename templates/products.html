@@ -1,0 +1,1035 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable = no">
+
+  <script
+    src="https://kit.fontawesome.com/1f15ce75ba.js"
+    crossorigin="anonymous"
+  ></script>
+
+  <title>Products - SIMS</title>
+
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/dashboard.css') }}"
+  >
+
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/products.css') }}"
+  >
+</head>
+
+<body>
+ <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <button class="close-btn" id="closeBtn">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+
+    <div class="brand">
+      <h1>SIMS</h1>
+      <p>Smart and Inventory Management System</p>
+    </div>
+
+    <ul class="nav-menu">
+      <li class="nav-item ">
+        <a href="/dashboard"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
+      </li>
+    </ul>
+
+    <div class="nav-section">Inventory</div>
+    <ul class="nav-menu">
+      <li class="nav-item active">
+        <a href="/products"><i class="fa-solid fa-box"></i> Products</a>
+      </li>
+      <li class="nav-item">
+        <a href="/categories"><i class="fa-solid fa-tags"></i> Categories</a>
+      </li>
+      <li class="nav-item">
+        <a href="/stock"><i class="fa-solid fa-warehouse"></i> Stock</a>
+      </li>
+    </ul>
+
+    <div class="nav-section">Sales</div>
+    <ul class="nav-menu">
+      <li class="nav-item">
+        <a href="/sales"><i class="fa-solid fa-cart-plus"></i> New Sale</a>
+      </li>
+      <li class="nav-item">
+        <a href="sales-history"><i class="fa-solid fa-clock-rotate-left"></i> Sales History</a>
+      </li>
+      <li class="nav-item">
+        <a href="/customers"><i class="fa-solid fa-users"></i> Customers</a>
+      </li>
+      <li class="nav-item">
+        <a href="/settings"><i class="fa-solid fa-gear"></i> Settings</a>
+      </li>
+    </ul>
+
+    <a href="/login" class="logout-btn">
+      <i class="fa-solid fa-right-from-bracket"></i> Logout
+    </a>
+  </aside>
+
+  <div class="main-wrapper">
+
+    <header class="top-header">
+
+      <button class="menu-btn" id="menuBtn" type="button">
+        <i class="fa-solid fa-ellipsis-vertical"></i>
+      </button>
+
+      <div class="header-page-info">
+        <span class="header-label">INVENTORY</span>
+        <h1>Products</h1>
+        <p>Manage your inventory products</p>
+      </div>
+
+      <div class="user-profile">
+
+        <button class="icon-btn" type="button">
+          <i class="fa-regular fa-bell"></i>
+        </button>
+
+        <div class="avatar-circle">
+          {{ full_name[0].upper() }}
+        </div>
+
+        <div class="user-info">
+          <span class="user-name">{{ full_name }}</span>
+          <span class="user-role">Administrator</span>
+        </div>
+
+      </div>
+
+    </header>
+
+    <main class="content-area products-content">
+
+      <div class="product-page-header">
+
+        <div>
+          <span class="page-eyebrow">PRODUCT MANAGEMENT</span>
+
+          <h2>Manage Your Products</h2>
+
+          <p>Add, edit and manage products in your inventory.</p>
+        </div>
+
+        <button
+          id="addProductBtn"
+          class="primary-product-btn"
+          type="button"
+        >
+          <i class="fa-solid fa-plus"></i>
+          Add Product
+        </button>
+
+      </div>
+
+      <div class="product-stats">
+
+        <div class="product-stat-card">
+          <div class="product-stat-icon">
+            <i class="fa-solid fa-box"></i>
+          </div>
+
+          <div class="product-stat-content">
+            <span>Total Products</span>
+            <strong id="totalProducts">0</strong>
+          </div>
+        </div>
+
+        <div class="product-stat-card">
+          <div class="product-stat-icon">
+            <i class="fa-solid fa-layer-group"></i>
+          </div>
+
+          <div class="product-stat-content">
+            <span>Total Stock</span>
+            <strong id="totalStock">0</strong>
+          </div>
+        </div>
+
+        <div class="product-stat-card">
+          <div class="product-stat-icon">
+            <i class="fa-solid fa-dollar-sign"></i>
+          </div>
+
+          <div class="product-stat-content">
+            <span>Inventory Value</span>
+            <strong id="inventoryValue">0.00</strong>
+          </div>
+        </div>
+
+        <div class="product-stat-card">
+          <div class="product-stat-icon">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+          </div>
+
+          <div class="product-stat-content">
+            <span>Low Stock</span>
+            <strong id="lowStock">0</strong>
+          </div>
+        </div>
+
+      </div>
+
+      <section class="product-table-card">
+
+        <div class="product-table-header">
+
+          <div>
+            <h3>Product Inventory</h3>
+            <p>View and manage all your products.</p>
+          </div>
+
+          <div class="product-table-tools">
+
+            <div class="product-search">
+              <i class="fa-solid fa-magnifying-glass"></i>
+
+              <input
+                type="text"
+                id="searchProduct"
+                placeholder="Search products..."
+              >
+            </div>
+
+            <select id="categoryFilter">
+              <option value="">All Categories</option>
+            </select>
+
+          </div>
+
+        </div>
+
+        <div class="product-table-wrapper">
+
+          <table class="products-table">
+
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Product</th>
+                <th>SKU</th>
+                <th>Category</th>
+                <th>Purchase Price</th>
+                <th>Selling Price</th>
+                <th>Stock</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody id="productsTableBody"></tbody>
+
+          </table>
+
+        </div>
+
+        <div class="product-empty-state" id="emptyState">
+
+          <div class="empty-state-icon">
+            <i class="fa-solid fa-box-open"></i>
+          </div>
+
+          <h3>No Products Found</h3>
+
+          <p>
+            Add your first product to start managing your inventory.
+          </p>
+
+          <button
+            class="primary-product-btn"
+            id="emptyAddBtn"
+            type="button"
+          >
+            <i class="fa-solid fa-plus"></i>
+            Add Product
+          </button>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <div id="productModal" class="modal-overlay">
+
+    <div class="product-modal">
+
+      <div class="product-modal-header">
+
+        <div>
+          <span class="modal-eyebrow">PRODUCT</span>
+
+          <h2 id="modalTitle">Add Product</h2>
+
+          <p>Enter product information below.</p>
+        </div>
+
+        <button
+          id="closeModalBtn"
+          class="modal-close-btn"
+          type="button"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+
+      </div>
+
+      <form id="productForm">
+
+        <input type="hidden" id="productId">
+
+        <div class="product-form-group">
+
+          <label for="productName">Product Name</label>
+
+          <div class="product-input-wrapper">
+
+            <i class="fa-solid fa-box"></i>
+
+            <input
+              type="text"
+              id="productName"
+              placeholder="Enter product name"
+              required
+            >
+
+          </div>
+
+        </div>
+
+        <div class="product-form-group">
+
+          <label for="productSku">SKU</label>
+
+          <div class="product-input-wrapper">
+
+            <i class="fa-solid fa-barcode"></i>
+
+            <input
+              type="text"
+              id="productSku"
+              placeholder="Enter SKU"
+              required
+            >
+
+          </div>
+
+        </div>
+
+        <div class="product-form-group">
+
+          <label for="productCategory">Category</label>
+
+          <select id="productCategory" required>
+            <option value="">Select Category</option>
+          </select>
+
+        </div>
+
+        <div class="product-form-row">
+
+          <div class="product-form-group">
+
+            <label for="purchasePrice">Purchase Price</label>
+
+            <input
+              type="number"
+              id="purchasePrice"
+              min="0"
+              step="0.01"
+              placeholder="0.00"
+              required
+            >
+
+          </div>
+
+          <div class="product-form-group">
+
+            <label for="sellingPrice">Selling Price</label>
+
+            <input
+              type="number"
+              id="sellingPrice"
+              min="0"
+              step="0.01"
+              placeholder="0.00"
+              required
+            >
+
+          </div>
+
+        </div>
+
+        <div class="product-form-row">
+
+          <div class="product-form-group">
+
+            <label for="stockQuantity">Stock Quantity</label>
+
+            <input
+              type="number"
+              id="stockQuantity"
+              min="0"
+              placeholder="0"
+              required
+            >
+
+          </div>
+
+          <div class="product-form-group">
+
+            <label for="minimumStock">Minimum Stock</label>
+
+            <input
+              type="number"
+              id="minimumStock"
+              min="0"
+              value="5"
+              placeholder="5"
+              required
+            >
+
+          </div>
+
+        </div>
+
+        <div class="product-form-group">
+
+          <label for="productDescription">Description</label>
+
+          <textarea
+            id="productDescription"
+            rows="4"
+            placeholder="Enter product description..."
+          ></textarea>
+
+        </div>
+
+        <div class="product-modal-actions">
+
+          <button
+            type="button"
+            id="cancelBtn"
+            class="secondary-product-btn"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="primary-product-btn"
+          >
+            <i class="fa-solid fa-check"></i>
+            Save Product
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+<script>
+
+const productsTableBody = document.getElementById("productsTableBody");
+const searchProduct = document.getElementById("searchProduct");
+const categoryFilter = document.getElementById("categoryFilter");
+const addProductBtn = document.getElementById("addProductBtn");
+const emptyAddBtn = document.getElementById("emptyAddBtn");
+const emptyState = document.getElementById("emptyState");
+
+const productModal = document.getElementById("productModal");
+const modalTitle = document.getElementById("modalTitle");
+const closeModalBtn = document.getElementById("closeModalBtn");
+const cancelBtn = document.getElementById("cancelBtn");
+const productForm = document.getElementById("productForm");
+
+const productId = document.getElementById("productId");
+const productName = document.getElementById("productName");
+const productSku = document.getElementById("productSku");
+const productCategory = document.getElementById("productCategory");
+const purchasePrice = document.getElementById("purchasePrice");
+const sellingPrice = document.getElementById("sellingPrice");
+const stockQuantity = document.getElementById("stockQuantity");
+const minimumStock = document.getElementById("minimumStock");
+const productDescription = document.getElementById("productDescription");
+
+const totalProducts = document.getElementById("totalProducts");
+const totalStock = document.getElementById("totalStock");
+const inventoryValue = document.getElementById("inventoryValue");
+const lowStock = document.getElementById("lowStock");
+
+const sidebar = document.getElementById("sidebar");
+const menuBtn = document.getElementById("menuBtn");
+const closeBtn = document.getElementById("closeBtn");
+
+let products = [];
+
+if (menuBtn && sidebar) {
+  menuBtn.addEventListener("click", function () {
+    sidebar.classList.add("active");
+  });
+}
+
+if (closeBtn && sidebar) {
+  closeBtn.addEventListener("click", function () {
+    sidebar.classList.remove("active");
+  });
+}
+
+async function loadProducts() {
+  try {
+    const response = await fetch("/api/products");
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || "Failed to load products");
+    }
+
+    if (Array.isArray(result)) {
+      products = result;
+    } else if (result.success) {
+      products = result.products || [];
+    } else {
+      throw new Error(result.message || "Failed to load products");
+    }
+
+    updateProductStats(products);
+    filterProducts();
+
+  } catch (error) {
+    console.error("Error loading products:", error);
+
+    productsTableBody.innerHTML = `
+      <tr>
+        <td colspan="9">
+          <div class="empty-state">
+            <div class="empty-icon">!</div>
+            <p>Failed to load products.</p>
+          </div>
+        </td>
+      </tr>
+    `;
+
+    emptyState.style.display = "none";
+  }
+}
+
+function updateProductStats(productList) {
+
+  if (totalProducts) {
+    totalProducts.textContent = productList.length;
+  }
+
+  const totalStockUnits = productList.reduce(function (total, product) {
+    return total + Number(product.stock_quantity || 0);
+  }, 0);
+
+  if (totalStock) {
+    totalStock.textContent = totalStockUnits;
+  }
+
+  const inventoryTotal = productList.reduce(function (total, product) {
+    const purchase = Number(product.purchase_price || 0);
+    const stock = Number(product.stock_quantity || 0);
+
+    return total + purchase * stock;
+  }, 0);
+
+  if (inventoryValue) {
+    inventoryValue.textContent = inventoryTotal.toFixed(2);
+  }
+
+  const lowStockProducts = productList.filter(function (product) {
+    const stock = Number(product.stock_quantity || 0);
+    const minimum = Number(product.minimum_stock || 0);
+
+    return stock > 0 && stock <= minimum;
+  });
+
+  if (lowStock) {
+    lowStock.textContent = lowStockProducts.length;
+  }
+}
+
+function renderProducts(productList) {
+
+  productsTableBody.innerHTML = "";
+
+  if (productList.length === 0) {
+    emptyState.style.display = "block";
+    return;
+  }
+
+  emptyState.style.display = "none";
+
+  productList.forEach(function (product) {
+
+    const row = document.createElement("tr");
+
+    const purchase = Number(
+      product.purchase_price || 0
+    ).toFixed(2);
+
+    const selling = Number(
+      product.selling_price || 0
+    ).toFixed(2);
+
+    row.innerHTML = `
+      <td>#${product.id}</td>
+
+      <td>
+        <strong>
+          ${escapeHTML(product.product_name)}
+        </strong>
+      </td>
+
+      <td>
+        ${escapeHTML(product.sku)}
+      </td>
+
+      <td>
+        ${escapeHTML(product.category_name || "Uncategorized")}
+      </td>
+
+      <td>
+        ${purchase}
+      </td>
+
+      <td>
+        ${selling}
+      </td>
+
+      <td>
+        <span class="stock-number">
+          ${product.stock_quantity}
+        </span>
+      </td>
+
+      <td>
+        ${getStockStatus(
+          Number(product.stock_quantity || 0),
+          Number(product.minimum_stock || 0)
+        )}
+      </td>
+
+      <td>
+        <div class="product-action-buttons">
+
+          <button
+            class="product-action-btn"
+            onclick="editProduct(${product.id})"
+            type="button"
+            title="Edit Product"
+          >
+            <i class="fa-solid fa-pen"></i>
+          </button>
+
+          <button
+            class="product-action-btn delete"
+            onclick="deleteProduct(${product.id})"
+            type="button"
+            title="Delete Product"
+          >
+            <i class="fa-solid fa-trash"></i>
+          </button>
+
+        </div>
+      </td>
+    `;
+
+    productsTableBody.appendChild(row);
+  });
+}
+
+function getStockStatus(stock, minimumStock) {
+
+  if (stock === 0) {
+    return `
+      <span class="product-status inactive">
+        Out of Stock
+      </span>
+    `;
+  }
+
+  if (stock <= minimumStock) {
+    return `
+      <span class="product-status inactive">
+        Low Stock
+      </span>
+    `;
+  }
+
+  return `
+    <span class="product-status active">
+      In Stock
+    </span>
+  `;
+}
+
+async function loadCategories() {
+
+  try {
+
+    const response = await fetch("/api/categories");
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(
+        result.message || "Failed to load categories"
+      );
+    }
+
+    const categories = result.categories || [];
+
+    productCategory.innerHTML = `
+      <option value="">Select Category</option>
+    `;
+
+    categoryFilter.innerHTML = `
+      <option value="">All Categories</option>
+    `;
+
+    categories.forEach(function (category) {
+
+      const productOption = document.createElement("option");
+
+      productOption.value = category.id;
+      productOption.textContent = category.name;
+
+      productCategory.appendChild(productOption);
+
+      const filterOption = document.createElement("option");
+
+      filterOption.value = category.id;
+      filterOption.textContent = category.name;
+
+      categoryFilter.appendChild(filterOption);
+    });
+
+  } catch (error) {
+    console.error("Error loading categories:", error);
+  }
+}
+
+if (searchProduct) {
+  searchProduct.addEventListener("input", filterProducts);
+}
+
+if (categoryFilter) {
+  categoryFilter.addEventListener("change", filterProducts);
+}
+
+function filterProducts() {
+
+  const searchValue = searchProduct.value
+    .toLowerCase()
+    .trim();
+
+  const selectedCategory = categoryFilter.value;
+
+  const filteredProducts = products.filter(function (product) {
+
+    const productNameValue = String(
+      product.product_name || ""
+    ).toLowerCase();
+
+    const skuValue = String(
+      product.sku || ""
+    ).toLowerCase();
+
+    const categoryNameValue = String(
+      product.category_name || ""
+    ).toLowerCase();
+
+    const matchesSearch =
+      productNameValue.includes(searchValue) ||
+      skuValue.includes(searchValue) ||
+      categoryNameValue.includes(searchValue);
+
+    const matchesCategory =
+      selectedCategory === "" ||
+      String(product.category_id) === selectedCategory;
+
+    return matchesSearch && matchesCategory;
+  });
+
+  renderProducts(filteredProducts);
+}
+
+if (addProductBtn) {
+  addProductBtn.addEventListener("click", openAddModal);
+}
+
+if (emptyAddBtn) {
+  emptyAddBtn.addEventListener("click", openAddModal);
+}
+
+function openAddModal() {
+
+  modalTitle.textContent = "Add Product";
+
+  productForm.reset();
+
+  productId.value = "";
+
+  productModal.classList.add("show");
+
+  setTimeout(function () {
+    productName.focus();
+  }, 100);
+}
+
+function closeModal() {
+
+  productModal.classList.remove("show");
+
+  productForm.reset();
+
+  productId.value = "";
+}
+
+if (closeModalBtn) {
+  closeModalBtn.addEventListener("click", closeModal);
+}
+
+if (cancelBtn) {
+  cancelBtn.addEventListener("click", closeModal);
+}
+
+productModal.addEventListener("click", function (event) {
+
+  if (event.target === productModal) {
+    closeModal();
+  }
+});
+
+document.addEventListener("keydown", function (event) {
+
+  if (
+    event.key === "Escape" &&
+    productModal.classList.contains("show")
+  ) {
+    closeModal();
+  }
+
+  if (
+    event.key === "Escape" &&
+    sidebar &&
+    sidebar.classList.contains("active")
+  ) {
+    sidebar.classList.remove("active");
+  }
+});
+
+productForm.addEventListener("submit", async function (event) {
+
+  event.preventDefault();
+
+  const id = productId.value;
+
+  const productData = {
+    product_name: productName.value.trim(),
+    sku: productSku.value.trim(),
+    category_id: Number(productCategory.value),
+    purchase_price: Number(purchasePrice.value),
+    selling_price: Number(sellingPrice.value),
+    stock_quantity: Number(stockQuantity.value),
+    minimum_stock: Number(minimumStock.value),
+    description: productDescription.value.trim()
+  };
+
+  if (!productData.product_name || !productData.sku) {
+    alert("Product name and SKU are required.");
+    return;
+  }
+
+  if (!productData.category_id) {
+    alert("Please select a category.");
+    return;
+  }
+
+  if (
+    productData.purchase_price < 0 ||
+    productData.selling_price < 0
+  ) {
+    alert("Prices cannot be negative.");
+    return;
+  }
+
+  if (
+    productData.stock_quantity < 0 ||
+    productData.minimum_stock < 0
+  ) {
+    alert("Stock values cannot be negative.");
+    return;
+  }
+
+  try {
+
+    let response;
+
+    if (id) {
+
+      response = await fetch(`/api/products/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(productData)
+      });
+
+    } else {
+
+      response = await fetch("/api/products", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(productData)
+      });
+
+    }
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      alert(result.message || "Something went wrong.");
+      return;
+    }
+
+    alert(result.message);
+
+    closeModal();
+
+    await loadProducts();
+
+  } catch (error) {
+
+    console.error("Error saving product:", error);
+
+    alert("Something went wrong while saving the product.");
+  }
+});
+
+async function editProduct(id) {
+
+  try {
+
+    const response = await fetch(`/api/products/${id}`);
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      alert(result.message || "Failed to load product.");
+      return;
+    }
+
+    const product = result.product;
+
+    modalTitle.textContent = "Edit Product";
+
+    productId.value = product.id;
+    productName.value = product.product_name || "";
+    productSku.value = product.sku || "";
+    productCategory.value = product.category_id || "";
+    purchasePrice.value = product.purchase_price || 0;
+    sellingPrice.value = product.selling_price || 0;
+    stockQuantity.value = product.stock_quantity || 0;
+    minimumStock.value = product.minimum_stock || 0;
+    productDescription.value = product.description || "";
+
+    productModal.classList.add("show");
+
+    setTimeout(function () {
+      productName.focus();
+    }, 100);
+
+  } catch (error) {
+
+    console.error("Error loading product:", error);
+
+    alert("Failed to load product.");
+  }
+}
+
+async function deleteProduct(id) {
+
+  const product = products.find(function (item) {
+    return Number(item.id) === Number(id);
+  });
+
+  const productNameValue = product
+    ? product.product_name
+    : "this product";
+
+  const confirmed = confirm(
+    `Are you sure you want to delete ${productNameValue}?`
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
+  try {
+
+    const response = await fetch(`/api/products/${id}`, {
+      method: "DELETE"
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      alert(result.message || "Failed to delete product.");
+      return;
+    }
+
+    alert(result.message);
+
+    await loadProducts();
+
+  } catch (error) {
+
+    console.error("Error deleting product:", error);
+
+    alert("Failed to delete product.");
+  }
+}
+
+function escapeHTML(value) {
+
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  loadCategories();
+  loadProducts();
+});
+
+</script>
+
+</body>
+</html>

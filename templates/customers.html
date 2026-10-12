@@ -1,0 +1,788 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale = 1.0, user-scalable = no">
+<title>Customers | SIMS</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static',filename='css/customers.css') }}">
+<link rel="stylesheet" href="{{ url_for('static',filename='css/dashboard.css') }}">
+<link rel="stylesheet" href="{{ url_for('static',filename='css/sales.css') }}">
+</head>
+
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <button class="close-btn" id="closeBtn">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+
+    <div class="brand">
+      <h1>SIMS</h1>
+      <p>Smart and Inventory Management System</p>
+    </div>
+
+    <ul class="nav-menu">
+      <li class="nav-item ">
+        <a href="/dashboard"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
+      </li>
+    </ul>
+
+    <div class="nav-section">Inventory</div>
+    <ul class="nav-menu">
+      <li class="nav-item">
+        <a href="/products"><i class="fa-solid fa-box"></i> Products</a>
+      </li>
+      <li class="nav-item">
+        <a href="/categories"><i class="fa-solid fa-tags"></i> Categories</a>
+      </li>
+      <li class="nav-item">
+        <a href="/stock"><i class="fa-solid fa-warehouse"></i> Stock</a>
+      </li>
+    </ul>
+
+    <div class="nav-section">Sales</div>
+    <ul class="nav-menu">
+      <li class="nav-item">
+        <a href="/sales"><i class="fa-solid fa-cart-plus"></i> New Sale</a>
+      </li>
+      <li class="nav-item">
+        <a href="sales-history"><i class="fa-solid fa-clock-rotate-left"></i> Sales History</a>
+      </li>
+      <li class="nav-item active">
+        <a href="/customers"><i class="fa-solid fa-users"></i> Customers</a>
+      </li>
+      <li class="nav-item">
+        <a href="/settings"><i class="fa-solid fa-gear"></i> Settings</a>
+      </li>
+    </ul>
+
+    <a href="/login" class="logout-btn">
+      <i class="fa-solid fa-right-from-bracket"></i> Logout
+    </a>
+  </aside>
+
+<main class="main-content">
+  <header class="top-header">
+        <button class="menu-btn" id="menuBtn" type="button">
+          <i class="fa-solid fa-ellipsis-vertical"></i>
+        </button>
+
+        <div class="header-page-info">
+          <span class="header-label">Customers</span>
+
+          <h1>New Customers</h1>
+
+          <p>Create and manage customers</p>
+        </div>
+
+        <div class="user-profile">
+          <button class="icon-btn" type="button">
+            <i class="fa-regular fa-bell"></i>
+          </button>
+
+          <div class="avatar-circle">{{ full_name[0].upper() }}</div>
+
+          <div class="user-info">
+            <span class="user-name">{{ full_name }}</span>
+            <span class="user-role">Administrator</span>
+          </div>
+        </div>
+      </header>
+
+<section class="customers-page">
+
+<div class="page-header">
+
+<div>
+<p class="page-label">Management</p>
+<h1>Customers</h1>
+<p>Manage your customers and their information.</p>
+</div>
+
+<button class="add-customer-btn" onclick="openAddCustomerModal()" type="button">
+<i class="fa-solid fa-plus"></i>
+Add Customer
+</button>
+
+</div>
+
+<div class="search-section">
+
+<div class="search-box-custom">
+
+<label for="searchCustomer">
+Search Customers
+</label>
+
+<div class="customer-search-input">
+
+<i class="fa-solid fa-magnifying-glass"></i>
+
+<input
+type="text"
+id="searchCustomer"
+placeholder="Search by name, phone or email..."
+>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="customers-section">
+
+<div class="section-header">
+
+<div>
+<h2>Customer List</h2>
+<p>All registered customers</p>
+</div>
+
+<span id="customerCount" class="customer-count">
+0 Customers
+</span>
+
+</div>
+
+<div class="table-container">
+
+<table class="customers-table">
+
+<thead>
+
+<tr>
+<th>#</th>
+<th>Customer</th>
+<th>Phone</th>
+<th>Email</th>
+<th>Address</th>
+<th>Created</th>
+<th>Actions</th>
+</tr>
+
+</thead>
+
+<tbody id="customerTableBody">
+
+<tr>
+<td colspan="7">
+
+<div class="loading-state">
+
+<div class="loading-icon">
+<i class="fa-solid fa-spinner fa-spin"></i>
+</div>
+
+<h3>Loading customers...</h3>
+<p>Please wait.</p>
+
+</div>
+
+</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+<div id="customerModal" class="modal">
+
+<div class="modal-content">
+
+<div class="modal-header">
+
+<div>
+<p class="modal-label">Customer</p>
+<h2 id="customerModalTitle">Add Customer</h2>
+</div>
+
+<button class="close-btn" onclick="closeCustomerModal()" type="button">
+<i class="fa-solid fa-xmark"></i>
+</button>
+
+</div>
+
+<form id="customerForm">
+
+<input type="hidden" id="customerId">
+
+<div class="form-group">
+
+<label for="customerName">
+Customer Name
+</label>
+
+<input
+type="text"
+id="customerName"
+placeholder="Enter customer name"
+required
+>
+
+</div>
+
+<div class="form-group">
+
+<label for="customerPhone">
+Phone
+</label>
+
+<input
+type="text"
+id="customerPhone"
+placeholder="Enter phone number"
+>
+
+</div>
+
+<div class="form-group">
+
+<label for="customerEmail">
+Email
+</label>
+
+<input
+type="email"
+id="customerEmail"
+placeholder="Enter email address"
+>
+
+</div>
+
+<div class="form-group">
+
+<label for="customerAddress">
+Address
+</label>
+
+<textarea
+id="customerAddress"
+rows="4"
+placeholder="Enter customer address"
+></textarea>
+
+</div>
+
+<div class="form-actions">
+
+<button
+type="button"
+class="cancel-btn"
+onclick="closeCustomerModal()"
+>
+Cancel
+</button>
+
+<button
+type="submit"
+class="save-btn"
+id="saveCustomerBtn"
+>
+<i class="fa-solid fa-check"></i>
+Save Customer
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+<script>
+  
+const sidebar=document.getElementById("sidebar");
+const menuBtn=document.getElementById("menuBtn");
+const closeBtn=document.getElementById("closeBtn");
+
+const customerModal=document.getElementById("customerModal");
+const customerModalTitle=document.getElementById("customerModalTitle");
+const customerForm=document.getElementById("customerForm");
+
+const customerTableBody=document.getElementById("customerTableBody");
+const customerCount=document.getElementById("customerCount");
+const searchCustomer=document.getElementById("searchCustomer");
+
+const customerId=document.getElementById("customerId");
+const customerName=document.getElementById("customerName");
+const customerPhone=document.getElementById("customerPhone");
+const customerEmail=document.getElementById("customerEmail");
+const customerAddress=document.getElementById("customerAddress");
+
+const saveCustomerBtn=document.getElementById("saveCustomerBtn");
+
+let customers=[];
+let editingCustomerId=null;
+
+/* SIDEBAR */
+
+if(menuBtn&&sidebar){
+menuBtn.addEventListener("click",function(){
+sidebar.classList.add("active");
+});
+}
+
+if(closeBtn&&sidebar){
+closeBtn.addEventListener("click",function(){
+sidebar.classList.remove("active");
+});
+}
+
+document.querySelectorAll(".nav-link").forEach(function(link){
+link.addEventListener("click",function(){
+if(window.innerWidth<=480){
+sidebar.classList.remove("active");
+}
+});
+});
+
+/* ESCAPE HTML */
+
+function escapeHTML(value){
+
+if(value===null||value===undefined){
+return "";
+}
+
+return String(value)
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+
+}
+
+/* LOAD CUSTOMERS */
+
+async function loadCustomers(){
+
+try{
+
+const response=await fetch("/api/customers");
+
+if(!response.ok){
+throw new Error("Failed to load customers.");
+}
+
+const result=await response.json();
+
+if(Array.isArray(result)){
+customers=result;
+}else if(result.success){
+customers=result.customers||[];
+}else{
+customers=result.customers||[];
+}
+
+renderCustomers(customers);
+
+}catch(error){
+
+console.error("Customer loading error:",error);
+
+customerCount.textContent="0 Customers";
+
+customerTableBody.innerHTML=`
+<tr>
+<td colspan="7">
+<div class="loading-state">
+<div class="loading-icon">
+<i class="fa-solid fa-triangle-exclamation"></i>
+</div>
+<h3>Unable to load customers</h3>
+<p>Please try again.</p>
+</div>
+</td>
+</tr>
+`;
+
+}
+
+}
+
+/* RENDER CUSTOMERS */
+
+function renderCustomers(data){
+
+const count=data.length;
+
+customerCount.textContent=
+`${count} ${count===1?"Customer":"Customers"}`;
+
+if(count===0){
+
+customerTableBody.innerHTML=`
+<tr>
+<td colspan="7">
+<div class="loading-state">
+<div class="loading-icon">
+<i class="fa-solid fa-users"></i>
+</div>
+<h3>No customers found</h3>
+<p>Add a customer to see records here.</p>
+</div>
+</td>
+</tr>
+`;
+
+return;
+
+}
+
+customerTableBody.innerHTML=data.map(function(customer,index){
+
+let created="—";
+
+if(customer.created_at){
+
+const date=new Date(customer.created_at);
+
+if(!isNaN(date)){
+created=date.toLocaleDateString();
+}
+
+}
+
+return`
+<tr>
+
+<td>${index+1}</td>
+
+<td>${escapeHTML(customer.customer_name||"—")}</td>
+
+<td>${escapeHTML(customer.phone||"—")}</td>
+
+<td>${escapeHTML(customer.email||"—")}</td>
+
+<td>${escapeHTML(customer.address||"—")}</td>
+
+<td>${created}</td>
+
+<td>
+
+<button
+class="edit-btn"
+onclick="editCustomer(${customer.id})"
+type="button"
+>
+<i class="fa-solid fa-pen"></i>
+
+</button>
+
+<button
+class="delete-btn"
+onclick="deleteCustomer(${customer.id})"
+type="button"
+>
+<i class="fa-solid fa-trash"></i>
+
+</button>
+
+</td>
+
+</tr>
+`;
+
+}).join("");
+
+}
+
+/* SEARCH */
+
+if(searchCustomer){
+
+searchCustomer.addEventListener("input",function(){
+
+const search=this.value.toLowerCase().trim();
+
+if(!search){
+renderCustomers(customers);
+return;
+}
+
+const filtered=customers.filter(function(customer){
+
+const name=String(customer.customer_name||"").toLowerCase();
+const phone=String(customer.phone||"").toLowerCase();
+const email=String(customer.email||"").toLowerCase();
+
+return(
+name.includes(search)||
+phone.includes(search)||
+email.includes(search)
+);
+
+});
+
+renderCustomers(filtered);
+
+});
+
+}
+
+/* OPEN ADD MODAL */
+
+function openAddCustomerModal(){
+
+editingCustomerId=null;
+
+customerForm.reset();
+
+customerId.value="";
+
+customerModalTitle.textContent="Add Customer";
+
+saveCustomerBtn.innerHTML=
+'<i class="fa-solid fa-check"></i> Save Customer';
+
+customerModal.classList.add("active");
+
+setTimeout(function(){
+customerName.focus();
+},100);
+
+}
+
+/* CLOSE MODAL */
+
+function closeCustomerModal(){
+
+customerModal.classList.remove("active");
+
+editingCustomerId=null;
+
+}
+
+/* EDIT CUSTOMER */
+
+function editCustomer(id){
+
+const customer=customers.find(function(item){
+return Number(item.id)===Number(id);
+});
+
+if(!customer){
+return;
+}
+
+editingCustomerId=id;
+
+customerId.value=customer.id;
+
+customerName.value=customer.customer_name||"";
+customerPhone.value=customer.phone||"";
+customerEmail.value=customer.email||"";
+customerAddress.value=customer.address||"";
+
+customerModalTitle.textContent="Edit Customer";
+
+saveCustomerBtn.innerHTML=
+'<i class="fa-solid fa-check"></i> Update Customer';
+
+customerModal.classList.add("active");
+
+setTimeout(function(){
+customerName.focus();
+},100);
+
+}
+
+/* DELETE CUSTOMER */
+
+async function deleteCustomer(id){
+
+const customer=customers.find(function(item){
+return Number(item.id)===Number(id);
+});
+
+if(!customer){
+return;
+}
+
+const confirmed=confirm(
+`Are you sure you want to delete "${customer.customer_name}"?`
+);
+
+if(!confirmed){
+return;
+}
+
+try{
+
+const response=await fetch(
+`/api/customers/${id}`,
+{
+method:"DELETE"
+}
+);
+
+const result=await response.json();
+
+if(!response.ok){
+
+throw new Error(
+result.error||
+result.message||
+"Failed to delete customer."
+);
+
+}
+
+await loadCustomers();
+
+}catch(error){
+
+console.error("Delete customer error:",error);
+
+alert(error.message);
+
+}
+
+}
+
+/* SAVE CUSTOMER */
+
+customerForm.addEventListener("submit",async function(event){
+
+event.preventDefault();
+
+const name=customerName.value.trim();
+const phone=customerPhone.value.trim();
+const email=customerEmail.value.trim();
+const address=customerAddress.value.trim();
+
+if(!name){
+
+alert("Customer name is required.");
+
+customerName.focus();
+
+return;
+
+}
+
+const data={
+customer_name:name,
+phone:phone,
+email:email,
+address:address
+};
+
+const isEditing=editingCustomerId!==null;
+const currentId=editingCustomerId;
+
+saveCustomerBtn.disabled=true;
+
+saveCustomerBtn.innerHTML=
+'<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+
+try{
+
+const url=isEditing
+?`/api/customers/${currentId}`
+:"/api/customers";
+
+const method=isEditing
+?"PUT"
+:"POST";
+
+const response=await fetch(
+url,
+{
+method:method,
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify(data)
+}
+);
+
+const result=await response.json();
+
+if(!response.ok||result.success===false){
+
+throw new Error(
+result.error||
+result.message||
+"Failed to save customer."
+);
+
+}
+
+closeCustomerModal();
+
+await loadCustomers();
+
+}catch(error){
+
+console.error("Save customer error:",error);
+
+alert(error.message);
+
+}finally{
+
+saveCustomerBtn.disabled=false;
+
+saveCustomerBtn.innerHTML=isEditing
+?'<i class="fa-solid fa-check"></i> Update Customer'
+:'<i class="fa-solid fa-check"></i> Save Customer';
+
+}
+
+});
+
+/* CLOSE MODAL ON BACKDROP */
+
+customerModal.addEventListener("click",function(event){
+
+if(event.target===customerModal){
+closeCustomerModal();
+}
+
+});
+
+/* ESCAPE KEY */
+
+document.addEventListener("keydown",function(event){
+
+if(event.key==="Escape"){
+
+if(customerModal.classList.contains("active")){
+closeCustomerModal();
+}
+
+if(sidebar){
+sidebar.classList.remove("active");
+}
+
+}
+
+});
+
+/* INITIALIZE */
+
+document.addEventListener("DOMContentLoaded",function(){
+
+loadCustomers();
+
+});
+
+
+</script>
+</body>
+</html>
+

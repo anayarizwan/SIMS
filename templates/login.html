@@ -11,8 +11,14 @@
       crossorigin="anonymous"
     ></script>
     <title>Login Page</title>
-    <link rel="stylesheet" href="/assets/css/style.css" />
-    <link rel="stylesheet" href="/assets/css/login.css" />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', filename = 'css/style.css')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', filename = 'css/login.css')}}"
+    />
   </head>
   <body>
     <!-- login============================================================================================= -->
@@ -27,7 +33,7 @@
               type="text"
               id="user"
               placeholder="username/Email"
-              required
+             
             />
           </div>
           <div class="password">
@@ -41,9 +47,9 @@
         <div class="checkbox">
           <input type="checkbox" /><label for="#">Remember me</label>
         </div>
-        <button type="submit">SIGN IN</button>
+        <button type="submit">LOGIN NOW</button>
         <p id="errorMessage"></p>
-        <p>Don't have an account <a href="#">Create One</a></p>
+        <p>Don't have an account <a href="/signup">Create One</a></p>
       </form>
     </div>
   </body>
@@ -53,7 +59,7 @@
     let password = document.getElementById("password");
     let user = document.getElementById("user");
     let errorMessage = document.getElementById("errorMessage");
-// eye open close
+    // eye open close
     eye.addEventListener("click", () => {
       if (password.type === "password") {
         password.type = "text";
@@ -65,20 +71,47 @@
         eye.classList.add("fa-eye");
       }
     });
-// form submit and error message
-    form.addEventListener("submit", (event) => {
+    // form submit and error message
+    form.addEventListener("submit", async (event) => {
       event.preventDefault();
       if (user.value.trim() === "" || password.value === "") {
         errorMessage.innerHTML = "Invalid Credentials";
-        errorMessage.style.color = "red";
-      }
+        return;
+        }
 
       if (user.value.includes("@") && !user.value.includes(".")) {
         errorMessage.innerHTML = "Invalid email";
-        errorMessage.style.color = "red";
-      } else {
-        errorMessage.innerHTML = "Valid Caradentials";
-        errorMessage.style.color = "green";
+        return;
+      } 
+
+      // authentication
+      let loginData = {
+        username: user.value,
+        password: password.value,
+      };
+
+      // send request to flask
+      let response = await fetch("/login", {
+        method: "POST",
+        headers:{
+          "Content-Type":"application/json",
+        },
+        body:JSON.stringify(loginData),
+      });
+
+      let data = await response.json();
+      console.log(data)
+
+      if(data.success){
+        errorMessage.style.color="green";
+        errorMessage.innerHTML=data.message;
+        form.reset();
+        console.log("Login Success")
+        window.location.href = "/dashboard";
+      }
+      else{
+        errorMessage.style.color="red";
+        errorMessage.innerHTML=data.message
       }
     });
   </script>

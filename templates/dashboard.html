@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <script src="https://kit.fontawesome.com/1f15ce75ba.js" crossorigin="anonymous"></script>
+  <title>SIMS DASHBOARD</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='css/dashboard.css')}}">
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <button class="close-btn" id="closeBtn">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+
+    <div class="brand">
+      <h1>SIMS</h1>
+      <p>Smart and Inventory Management System</p>
+    </div>
+
+    <ul class="nav-menu">
+      <li class="nav-item active">
+        <a href="/dashboard"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
+      </li>
+    </ul>
+
+    <div class="nav-section">Inventory</div>
+    <ul class="nav-menu">
+      <li class="nav-item">
+        <a href="/products"><i class="fa-solid fa-box"></i> Products</a>
+      </li>
+      <li class="nav-item">
+        <a href="/categories"><i class="fa-solid fa-tags"></i> Categories</a>
+      </li>
+      <li class="nav-item">
+        <a href="/stock"><i class="fa-solid fa-warehouse"></i> Stock</a>
+      </li>
+    </ul>
+
+    <div class="nav-section">Sales</div>
+    <ul class="nav-menu">
+      <li class="nav-item">
+        <a href="/sales"><i class="fa-solid fa-cart-plus"></i> New Sale</a>
+      </li>
+      <li class="nav-item">
+        <a href="sales-history"><i class="fa-solid fa-clock-rotate-left"></i> Sales History</a>
+      </li>
+      <li class="nav-item">
+        <a href="/customers"><i class="fa-solid fa-users"></i> Customers</a>
+      </li>
+      <li class="nav-item">
+        <a href="/settings"><i class="fa-solid fa-gear"></i> Settings</a>
+      </li>
+    </ul>
+
+    <a href="/login" class="logout-btn">
+      <i class="fa-solid fa-right-from-bracket"></i> Logout
+    </a>
+  </aside>
+
+  <!-- Main Content Wrapper -->
+  <div class="main-wrapper">
+    <!-- Top Header -->
+    <header class="top-header">
+      <button class="menu-btn" id="menuBtn">
+        <i class="fa-solid fa-ellipsis-vertical"></i>
+      </button>
+
+      <div class="search-bar">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" placeholder="Search...">
+      </div>
+
+      <!-- Top Right Corner Profile -->
+      <div class="user-profile">
+        <button class="icon-btn"><i class="fa-regular fa-bell"></i></button>
+        <div class="avatar-circle">{{full_name[0].upper()}}</div>
+        <div class="user-info">
+          <span class="user-name">{{full_name}}</span>
+          <span class="user-role">Administrator</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Inner Dashboard View -->
+    <main class="content-area">
+      <div class="page-title">
+        <h2>Dashboard</h2>
+        <p>Welcome back! Here's an overview of your inventory and sales.</p>
+      </div>
+
+      <!-- ROW 1: Overview Cards Grid -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-card-left">
+            <div class="stat-header">
+              <span class="stat-icon"><i class="fa-solid fa-box"></i></span>
+              <span class="stat-title">Total Products</span>
+            </div>
+            <div class="stat-value" id="totalProducts">0</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-card-left">
+            <div class="stat-header">
+              <span class="stat-icon"><i class="fa-solid fa-layer-group"></i></span>
+              <span class="stat-title">Categories</span>
+            </div>
+            <div class="stat-value" id="totalCategories">0</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-card-left">
+            <div class="stat-header">
+              <span class="stat-icon"><i class="fa-solid fa-triangle-exclamation"></i></span>
+              <span class="stat-title">Low Stock</span>
+            </div>
+            <div class="stat-value" id="lowStock">0</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-card-left">
+            <div class="stat-header">
+              <span class="stat-icon"><i class="fa-solid fa-chart-line"></i></span>
+              <span class="stat-title">Today's Sales</span>
+            </div>
+            <div class="stat-value" id="todaySales">0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+        <!-- Recent Sales -->
+        <div class="card row-2-card">
+          <div class="card-header">
+            <h3>Recent Sales</h3>
+            <a href="#" class="view-all">View All</a>
+          </div>
+
+          <div class="card-body-scroll">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Invoice No</th>
+                  <th>Customer</th>
+                  <th>Date</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="recentSalesBody"></tbody>
+            </table>
+
+            <!-- Default placeholder when no sales exist -->
+            <div class="no-data" id="noSalesMessage">
+              <i class="fa-solid fa-receipt"></i>
+              <p>No sales recorded yet.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Low Stock Alert Box -->
+        <div class="card row-2-card">
+          <div class="card-header">
+            <h3>Low Stock</h3>
+            <a href="#" class="view-all">View All</a>
+          </div>
+
+          <div class="card-body-scroll">
+            <div class="no-data" id="noStockMessage">
+              <i class="fa-solid fa-box-open"></i>
+              <p>No low stock items.</p>
+            </div>
+
+            <div class="stock-list" id="stockList"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 3: Quick Actions -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Quick Actions</h3>
+        </div>
+
+        <div class="quick-actions-grid">
+          <a href="/products" class="action-btn">
+            <div class="action-icon"><i class="fa-solid fa-plus"></i></div>
+            <div class="action-text">
+              <strong>Add Product</strong>
+              <span>Add a new product</span>
+            </div>
+          </a>
+
+          <a href="/sales" class="action-btn">
+            <div class="action-icon">
+              <i class="fa-solid fa-cart-plus"></i>
+            </div>
+            <div class="action-text">
+              <strong>New Sale</strong>
+              <span>Create inventory sale</span>
+            </div>
+          </a>
+
+          <a href="/stock" class="action-btn">
+            <div class="action-icon"><i class="fa-solid fa-list"></i></div>
+            <div class="action-text">
+              <strong>View Products</strong>
+              <span>Manage inventory</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    async function loadDashboardData() {
+      try {
+        const response = await fetch("/api/dashboard/stats");
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || "Failed to load dashboard data.");
+        }
+
+        document.getElementById("totalProducts").textContent = data.total_products ?? 0;
+        document.getElementById("totalCategories").textContent = data.total_categories ?? 0;
+        document.getElementById("lowStock").textContent = data.low_stock ?? 0;
+        document.getElementById("todaySales").textContent = data.today_sales ?? 0;
+
+        if (data.recent_sales) {
+          displayRecentSales(data.recent_sales);
+        }
+
+        if (data.low_stock_products) {
+          displayLowStockProducts(data.low_stock_products);
+        }
+      } catch (error) {
+        console.error("Dashboard Error:", error);
+      }
+    }
+
+    function displayRecentSales(sales) {
+      const tableBody = document.getElementById("recentSalesBody");
+      const noSalesMessage = document.getElementById("noSalesMessage");
+
+      if (!tableBody) {
+        return;
+      }
+
+      if (!sales || sales.length === 0) {
+        tableBody.innerHTML = "";
+        noSalesMessage.style.display = "flex";
+        return;
+      }
+
+      noSalesMessage.style.display = "none";
+      tableBody.innerHTML = "";
+
+      sales.forEach((sale) => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+          <td>#${sale.invoice ?? ""}</td>
+          <td>${sale.customer ?? ""}</td>
+          <td>${sale.date ?? ""}</td>
+          <td>${sale.amount ?? ""}</td>
+          <td>${sale.status ?? ""}</td>
+        `;
+
+        tableBody.appendChild(row);
+      });
+    }
+
+    function displayLowStockProducts(products) {
+      const stockList = document.getElementById("stockList");
+      const noStockMessage = document.getElementById("noStockMessage");
+
+      if (!stockList) {
+        return;
+      }
+
+      if (!products || products.length === 0) {
+        stockList.innerHTML = "";
+        noStockMessage.style.display = "flex";
+        return;
+      }
+
+      noStockMessage.style.display = "none";
+      stockList.innerHTML = "";
+
+      products.forEach((product) => {
+        const item = document.createElement("div");
+
+        item.className = "stock-item";
+
+        item.innerHTML = `
+          <div>
+            <strong>${product.name}</strong>
+            <small>${product.quantity} units remaining</small>
+          </div>
+        `;
+
+        stockList.appendChild(item);
+      });
+    }
+
+    document.getElementById("menuBtn").addEventListener("click", () => {
+      document.getElementById("sidebar").classList.add("active");
+    });
+
+    document.getElementById("closeBtn").addEventListener("click", () => {
+      document.getElementById("sidebar").classList.remove("active");
+    });
+
+    loadDashboardData();
+  </script>
+</body>
+</html>

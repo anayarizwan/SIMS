@@ -1,0 +1,697 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale= 1.0, user-scalable = no"/>
+
+    <script
+      src="https://kit.fontawesome.com/1f15ce75ba.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <title>New Sale - SIMS</title>
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/dashboard.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/sales.css') }}"
+    />
+  </head>
+
+  <body>
+    <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <button class="close-btn" id="closeBtn">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+
+    <div class="brand">
+      <h1>SIMS</h1>
+      <p>Smart and Inventory Management System</p>
+    </div>
+
+    <ul class="nav-menu">
+      <li class="nav-item">
+        <a href="/dashboard"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
+      </li>
+    </ul>
+
+    <div class="nav-section">Inventory</div>
+    <ul class="nav-menu">
+      <li class="nav-item">
+        <a href="/products"><i class="fa-solid fa-box"></i> Products</a>
+      </li>
+      <li class="nav-item">
+        <a href="/categories"><i class="fa-solid fa-tags"></i> Categories</a>
+      </li>
+      <li class="nav-item ">
+        <a href="/stock"><i class="fa-solid fa-warehouse"></i> Stock</a>
+      </li>
+    </ul>
+
+    <div class="nav-section">Sales</div>
+    <ul class="nav-menu">
+      <li class="nav-item active">
+        <a href="/sales"><i class="fa-solid fa-cart-plus"></i> New Sale</a>
+      </li>
+      <li class="nav-item">
+        <a href="sales-history"><i class="fa-solid fa-clock-rotate-left"></i> Sales History</a>
+      </li>
+      <li class="nav-item">
+        <a href="/customers"><i class="fa-solid fa-users"></i> Customers</a>
+      </li>
+      <li class="nav-item">
+        <a href="/settings"><i class="fa-solid fa-gear"></i> Settings</a>
+      </li>
+    </ul>
+
+    <a href="/login" class="logout-btn">
+      <i class="fa-solid fa-right-from-bracket"></i> Logout
+    </a>
+  </aside>
+    <!-- MAIN WRAPPER -->
+
+    <div class="main-wrapper">
+      <!-- TOP HEADER -->
+      <header class="top-header">
+        <button class="menu-btn" id="menuBtn" type="button">
+          <i class="fa-solid fa-ellipsis-vertical"></i>
+        </button>
+
+        <div class="header-page-info">
+          <span class="header-label">SALES</span>
+
+          <h1>New Sale</h1>
+
+          <p>Create and manage customer sales</p>
+        </div>
+
+        <div class="user-profile">
+          <button class="icon-btn" type="button">
+            <i class="fa-regular fa-bell"></i>
+          </button>
+
+          <div class="avatar-circle">{{ full_name[0].upper() }}</div>
+
+          <div class="user-info">
+            <span class="user-name">{{ full_name }}</span>
+            <span class="user-role">Administrator</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- CONTENT -->
+
+      <main class="content-area sales-content">
+        <!-- PAGE HEADER -->
+
+        <div class="sales-page-header">
+          <div>
+            <span class="page-eyebrow"> SALES MANAGEMENT </span>
+
+            <h2>New Sale</h2>
+
+            <p>
+              Create a new customer sale by selecting products and quantities.
+            </p>
+          </div>
+        </div>
+
+        <!-- SALE CARD -->
+
+        <section class="sale-card">
+          <!-- SALE INFORMATION HEADER -->
+
+          <div class="sale-section-header">
+            <div>
+              <h3>Sale Information</h3>
+
+              <p>Select a customer and add products to the sale.</p>
+            </div>
+
+            <div class="sale-header-icon">
+              <i class="fa-solid fa-cart-shopping"></i>
+            </div>
+          </div>
+
+          <!-- CUSTOMER -->
+
+          <div class="sale-form-group customer-group">
+            <label for="customerSelect"> Customer </label>
+
+            <div class="select-wrapper">
+              <i class="fa-solid fa-user"></i>
+
+              <select id="customerSelect">
+                <option value="">Walk-in Customer</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- PRODUCT AREA -->
+
+          <div class="sale-product-row">
+            <div class="sale-form-group product-field">
+              <label for="productSelect"> Product </label>
+
+              <div class="select-wrapper">
+                <i class="fa-solid fa-box"></i>
+
+                <select id="productSelect">
+                  <option value="">Select Product</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="sale-form-group quantity-group">
+              <label for="quantity"> Quantity </label>
+
+              <div class="input-wrapper">
+                <i class="fa-solid fa-hashtag"></i>
+
+                <input
+                  type="number"
+                  id="quantity"
+                  min="1"
+                  value="1"
+                  placeholder="Quantity"
+                />
+              </div>
+            </div>
+
+            <div class="add-item-container">
+              <button type="button" class="btn-primary" id="addItemBtn">
+                <i class="fa-solid fa-plus"></i>
+                Add Item
+              </button>
+            </div>
+          </div>
+
+          <!-- SALE ITEMS -->
+
+          <div class="sale-items-section">
+            <div class="sale-section-header">
+              <div>
+                <h3>Sale Items</h3>
+
+                <p>Products added to this sale.</p>
+              </div>
+
+              <div class="items-count">
+                <i class="fa-solid fa-list"></i>
+              </div>
+            </div>
+
+            <!-- TABLE -->
+
+            <div class="sale-table-wrapper">
+              <table class="sale-table">
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>SKU</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Subtotal</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+
+                <tbody id="saleItemsTableBody">
+                  <tr id="emptySaleRow">
+                    <td colspan="6">
+                      <div class="sale-empty-state">
+                        <div class="sale-empty-icon">
+                          <i class="fa-solid fa-cart-plus"></i>
+                        </div>
+
+                        <h4>No Products Added</h4>
+
+                        <p>Select a product above and click Add Item.</p>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- SALE SUMMARY -->
+
+          <div class="sale-summary">
+            <div class="summary-header">
+              <div>
+                <span>SALE SUMMARY</span>
+
+                <h3>Payment Details</h3>
+              </div>
+
+              <i class="fa-solid fa-receipt"></i>
+            </div>
+
+            <div class="summary-row">
+              <span>Subtotal</span>
+
+              <strong id="subtotal"> 0.00 </strong>
+            </div>
+
+            <div class="summary-row discount-row">
+              <label for="discount"> Discount (%) </label>
+
+              <div class="discount-input">
+                <input
+                  type="number"
+                  id="discount"
+                  min="0"
+                  max="100"
+                  value="0"
+                  step="0.01"
+                  placeholder="0"
+                />
+
+                <span>%</span>
+              </div>
+            </div>
+
+            <div class="summary-divider"></div>
+
+            <div class="summary-row grand-total">
+              <span>Grand Total</span>
+
+              <strong id="grandTotal"> 0.00 </strong>
+            </div>
+
+            <button
+              type="button"
+              class="complete-sale-btn"
+              id="completeSaleBtn"
+            >
+              <i class="fa-solid fa-check"></i>
+              Complete Sale
+            </button>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      
+      // SIMS NEW SALE
+
+      // DOM
+      const customerSelect = document.getElementById("customerSelect");
+      const productSelect = document.getElementById("productSelect");
+      const quantityInput = document.getElementById("quantity");
+      const addItemBtn = document.getElementById("addItemBtn");
+      const saleItemsTableBody = document.getElementById("saleItemsTableBody");
+      const subtotalElement = document.getElementById("subtotal");
+      const discountInput = document.getElementById("discount");
+      const grandTotalElement = document.getElementById("grandTotal");
+      const completeSaleBtn = document.getElementById("completeSaleBtn");
+
+      // Sidebar
+      const sidebar = document.getElementById("sidebar");
+      const menuBtn = document.getElementById("menuBtn");
+      const closeBtn = document.getElementById("closeBtn");
+
+      if (menuBtn && sidebar) {
+        menuBtn.addEventListener("click", function () {
+          sidebar.classList.add("active");
+        });
+      }
+
+      if (closeBtn && sidebar) {
+        closeBtn.addEventListener("click", function () {
+          sidebar.classList.remove("active");
+        });
+      }
+
+      // Data
+      let customers = [];
+      let products = [];
+      let saleItems = [];
+
+      // Load customers
+      async function loadCustomers() {
+        try {
+          const response = await fetch("/api/customers");
+
+          if (!response.ok) {
+            throw new Error("Failed to load customers.");
+          }
+
+          const result = await response.json();
+
+          if (!result.success) {
+            throw new Error(result.message || "Failed to load customers.");
+          }
+
+          customers = result.customers || [];
+
+          customerSelect.innerHTML = `<option value="">Walk-in Customer</option>`;
+
+          customers.forEach(function (customer) {
+            const option = document.createElement("option");
+
+            option.value = customer.id;
+            option.textContent = `${customer.customer_name} - ${customer.phone || "No phone"}`;
+
+            customerSelect.appendChild(option);
+          });
+        } catch (error) {
+          console.error("Customer loading error:", error);
+          alert("Failed to load customers.");
+        }
+      }
+
+      // Load products
+      async function loadProducts() {
+        try {
+          const response = await fetch("/api/products");
+
+          if (!response.ok) {
+            throw new Error("Failed to load products.");
+          }
+
+          const result = await response.json();
+
+          if (Array.isArray(result)) {
+            products = result;
+          } else if (result.success) {
+            products = result.products || [];
+          } else {
+            throw new Error(result.message || "Failed to load products.");
+          }
+
+          populateProductSelect();
+        } catch (error) {
+          console.error("Product loading error:", error);
+          alert("Failed to load products.");
+        }
+      }
+
+      // Product dropdown
+      function populateProductSelect() {
+        productSelect.innerHTML = `<option value="">Select Product</option>`;
+
+        products.forEach(function (product) {
+          const stock = Number(product.stock_quantity || 0);
+          const option = document.createElement("option");
+
+          option.value = product.id;
+          option.textContent = `${product.product_name} | ${product.sku} | Stock: ${stock}`;
+
+          if (stock <= 0) {
+            option.disabled = true;
+          }
+
+          productSelect.appendChild(option);
+        });
+      }
+
+      // Product selection
+      productSelect.addEventListener("change", function () {
+        const selectedProductId = Number(productSelect.value);
+
+        const product = products.find(function (item) {
+          return Number(item.id) === selectedProductId;
+        });
+
+        if (!product) {
+          quantityInput.value = 1;
+          quantityInput.removeAttribute("max");
+          return;
+        }
+
+        const stock = Number(product.stock_quantity || 0);
+
+        if (stock <= 0) {
+          alert("This product is out of stock.");
+          productSelect.value = "";
+          quantityInput.value = 1;
+          quantityInput.removeAttribute("max");
+          return;
+        }
+
+        quantityInput.value = 1;
+        quantityInput.max = stock;
+      });
+
+      // Add item
+      addItemBtn.addEventListener("click", function () {
+        addSaleItem();
+      });
+
+      function addSaleItem() {
+        const productId = Number(productSelect.value);
+        const quantity = Number(quantityInput.value);
+
+        if (!productId) {
+          alert("Please select a product.");
+          return;
+        }
+
+        if (!quantity || quantity <= 0) {
+          alert("Please enter a valid quantity.");
+          return;
+        }
+
+        const product = products.find(function (item) {
+          return Number(item.id) === productId;
+        });
+
+        if (!product) {
+          alert("Product not found.");
+          return;
+        }
+
+        const availableStock = Number(product.stock_quantity || 0);
+
+        if (quantity > availableStock) {
+          alert(
+            `Only ${availableStock} units of ${product.product_name} are available.`,
+          );
+          return;
+        }
+
+        const existingItem = saleItems.find(function (item) {
+          return item.product_id === productId;
+        });
+
+        if (existingItem) {
+          const newQuantity = existingItem.quantity + quantity;
+
+          if (newQuantity > availableStock) {
+            alert(
+              `You cannot add more than ${availableStock} units of ${product.product_name}.`,
+            );
+            return;
+          }
+
+          existingItem.quantity = newQuantity;
+          existingItem.subtotal = newQuantity * existingItem.unit_price;
+        } else {
+          const unitPrice = Number(product.selling_price || 0);
+
+          saleItems.push({
+            product_id: product.id,
+            product_name: product.product_name,
+            sku: product.sku,
+            quantity: quantity,
+            unit_price: unitPrice,
+            subtotal: quantity * unitPrice,
+          });
+        }
+
+        renderSaleItems();
+        calculateTotals();
+
+        productSelect.value = "";
+        quantityInput.value = 1;
+        quantityInput.removeAttribute("max");
+      }
+
+      // Render items
+      function renderSaleItems() {
+        saleItemsTableBody.innerHTML = "";
+
+        if (saleItems.length === 0) {
+          saleItemsTableBody.innerHTML = `
+      <tr id="emptySaleRow">
+        <td colspan="6">
+          <div class="sale-empty-state">
+            <div class="sale-empty-icon">
+              <i class="fa-solid fa-cart-plus"></i>
+            </div>
+            <h4>No Products Added</h4>
+            <p>Select a product above and click Add Item.</p>
+          </div>
+        </td>
+      </tr>
+    `;
+          return;
+        }
+
+        saleItems.forEach(function (item, index) {
+          const row = document.createElement("tr");
+
+          row.innerHTML = `
+      <td>
+        <strong>${escapeHTML(item.product_name)}</strong>
+      </td>
+      <td>${escapeHTML(item.sku)}</td>
+      <td>${item.quantity}</td>
+      <td>${item.unit_price.toFixed(2)}</td>
+      <td>${item.subtotal.toFixed(2)}</td>
+      <td>
+        <button
+          type="button"
+          class="action-btn delete-btn"
+          onclick="removeSaleItem(${index})"
+        >
+          Remove
+        </button>
+      </td>
+    `;
+
+          saleItemsTableBody.appendChild(row);
+        });
+      }
+
+      // Remove item
+      function removeSaleItem(index) {
+        if (index < 0 || index >= saleItems.length) {
+          return;
+        }
+
+        saleItems.splice(index, 1);
+        renderSaleItems();
+        calculateTotals();
+      }
+
+      // Discount
+      discountInput.addEventListener("input", calculateTotals);
+
+      // Totals
+      function calculateTotals() {
+        const subtotal = saleItems.reduce(function (total, item) {
+          return total + item.subtotal;
+        }, 0);
+
+        let discountPercentage = Number(discountInput.value || 0);
+
+        if (discountPercentage < 0) {
+          discountPercentage = 0;
+          discountInput.value = 0;
+        }
+
+        if (discountPercentage > 100) {
+          discountPercentage = 100;
+          discountInput.value = 100;
+        }
+
+        const discountAmount = subtotal * (discountPercentage / 100);
+        const grandTotal = subtotal - discountAmount;
+
+        subtotalElement.textContent = subtotal.toFixed(2);
+        grandTotalElement.textContent = grandTotal.toFixed(2);
+        completeSaleBtn.disabled = saleItems.length === 0;
+      }
+
+      // Complete sale
+      completeSaleBtn.addEventListener("click", completeSale);
+
+      async function completeSale() {
+        if (saleItems.length === 0) {
+          alert("Please add at least one product.");
+          return;
+        }
+
+        const customerId = customerSelect.value
+          ? Number(customerSelect.value)
+          : null;
+
+        const subtotal = saleItems.reduce(function (total, item) {
+          return total + item.subtotal;
+        }, 0);
+
+        const discountPercentage = Number(discountInput.value || 0);
+        const discountAmount = subtotal * (discountPercentage / 100);
+        const finalAmount = subtotal - discountAmount;
+
+        const saleData = {
+          customer_id: customerId,
+          total_amount: subtotal,
+          discount: discountAmount,
+          final_amount: finalAmount,
+          items: saleItems.map(function (item) {
+            return {
+              product_id: item.product_id,
+              quantity: item.quantity,
+              unit_price: item.unit_price,
+              subtotal: item.subtotal,
+            };
+          }),
+        };
+
+        console.log("Sending sale data:", saleData);
+
+        try {
+          completeSaleBtn.disabled = true;
+          completeSaleBtn.textContent = "Processing...";
+
+          const response = await fetch("/api/sales", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(saleData),
+          });
+
+          const result = await response.json();
+
+          console.log("Flask response:", result);
+
+          if (!response.ok || !result.success) {
+            alert(result.message || "Failed to complete sale.");
+            return;
+          }
+
+          alert(`Sale completed successfully!\n\nSale ID: ${result.sale_id}`);
+
+          window.location.href = "/sales-history";
+        } catch (error) {
+          console.error("Complete sale error:", error);
+          alert("Something went wrong while completing the sale.");
+        } finally {
+          completeSaleBtn.disabled = saleItems.length === 0;
+          completeSaleBtn.textContent = "Complete Sale";
+        }
+      }
+
+      // Escape HTML
+      function escapeHTML(value) {
+        if (value === null || value === undefined) {
+          return "";
+        }
+
+        return String(value)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      // Initialize
+      document.addEventListener("DOMContentLoaded", function () {
+        loadCustomers();
+        loadProducts();
+        calculateTotals();
+      });
+    </script>
+  </body>
+</html>

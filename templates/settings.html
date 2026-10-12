@@ -1,0 +1,826 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Settings | SIMS</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/dashboard.css') }}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/sales-history.css') }}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/settings.css') }}"
+    />
+  </head>
+
+  <body>
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <button class="close-btn" id="closeBtn">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="brand">
+        <h1>SIMS</h1>
+        <p>Smart and Inventory Management System</p>
+      </div>
+
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="/dashboard"
+            ><i class="fa-solid fa-chart-pie"></i> Dashboard</a
+          >
+        </li>
+      </ul>
+
+      <div class="nav-section">Inventory</div>
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="/products"><i class="fa-solid fa-box"></i> Products</a>
+        </li>
+        <li class="nav-item">
+          <a href="/categories"><i class="fa-solid fa-tags"></i> Categories</a>
+        </li>
+        <li class="nav-item">
+          <a href="/stock"><i class="fa-solid fa-warehouse"></i> Stock</a>
+        </li>
+      </ul>
+
+      <div class="nav-section">Sales</div>
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="/sales"><i class="fa-solid fa-cart-plus"></i> New Sale</a>
+        </li>
+        <li class="nav-item">
+          <a href="sales-history"
+            ><i class="fa-solid fa-clock-rotate-left"></i> Sales History</a
+          >
+        </li>
+        <li class="nav-item">
+          <a href="/customers"><i class="fa-solid fa-users"></i> Customers</a>
+        </li>
+        <li class="nav-item active">
+          <a href="/settings"><i class="fa-solid fa-gear"></i> Settings</a>
+        </li>
+      </ul>
+
+      <a href="/login" class="logout-btn">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </a>
+    </aside>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <!-- Header -->
+      <header class="top-header">
+        <button
+          class="menu-btn"
+          id="menuBtn"
+          type="button"
+          aria-label="Open sidebar"
+        >
+          <i class="fa-solid fa-ellipsis-vertical"></i>
+        </button>
+
+        <div class="header-page-info">
+          <h1>Settings</h1>
+          <p>View and manage your settings</p>
+        </div>
+
+        <div class="user-profile">
+          <div class="avatar-circle" id="headerAvatar">
+            {{ full_name[0].upper() }}
+          </div>
+
+          <div class="user-info">
+            <span class="user-name" id="headerUserName"> {{ full_name }} </span>
+            <span class="user-role">Administrator</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Settings Content -->
+      <main class="content-area settings-content">
+        <div class="page-title settings-title">
+          <div>
+            <span class="settings-eyebrow">
+              <i class="fa-solid fa-sliders"></i>
+              SYSTEM PREFERENCES
+            </span>
+
+            <h2>Settings</h2>
+            <p>Manage your account, security and application preferences.</p>
+          </div>
+
+          <div class="settings-title-icon">
+            <i class="fa-solid fa-gear"></i>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="settings-tabs" role="tablist">
+          <button
+            class="settings-tab active"
+            type="button"
+            data-target="profileSection"
+            role="tab"
+            aria-selected="true"
+          >
+            <i class="fa-regular fa-user"></i> My Profile
+          </button>
+
+          <button
+            class="settings-tab"
+            type="button"
+            data-target="securitySection"
+            role="tab"
+            aria-selected="false"
+          >
+            <i class="fa-solid fa-shield-halved"></i> Security
+          </button>
+
+          <button
+            class="settings-tab"
+            type="button"
+            data-target="preferencesSection"
+            role="tab"
+            aria-selected="false"
+          >
+            <i class="fa-solid fa-sliders"></i> Preferences
+          </button>
+        </div>
+
+        <!-- Profile -->
+        <section
+          class="settings-panel active"
+          id="profileSection"
+          role="tabpanel"
+        >
+          <div class="settings-card">
+            <div class="settings-card-header">
+              <div>
+                <h3>Personal Information</h3>
+                <p>Manage your account details.</p>
+              </div>
+
+              <span class="card-icon">
+                <i class="fa-regular fa-id-card"></i>
+              </span>
+            </div>
+
+            <form id="profileForm">
+              <div class="profile-preview">
+                <div class="profile-avatar" id="profileAvatar">
+                  {{ full_name[0].upper() }}
+                </div>
+
+                <div>
+                  <h4 id="profilePreviewName">{{ full_name }}</h4>
+                  <p>SIMS Administrator</p>
+
+                  <span class="profile-status">
+                    <span></span> Account active
+                  </span>
+                </div>
+              </div>
+
+              <div class="settings-divider"></div>
+
+              <div class="settings-form-grid">
+                <div class="form-group">
+                  <label for="fullName">Full Name</label>
+                  <input
+                    type="text"
+                    id="fullName"
+                    name="full_name"
+                    value="{{ full_name }}"
+                    placeholder="Enter full name"
+                    required
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="username">Username</label>
+                  <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Enter username"
+                    required
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="email">Email Address</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter email address"
+                    required
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="phone">Phone Number</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    placeholder="Enter phone number"
+                  />
+                </div>
+              </div>
+
+              <div class="settings-actions">
+                <button type="reset" class="btn-secondary">Reset</button>
+
+                <button type="submit" class="btn-primary">
+                  <i class="fa-solid fa-check"></i> Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <!-- Security -->
+        <section
+          class="settings-panel"
+          id="securitySection"
+          role="tabpanel"
+          hidden
+        >
+          <div class="settings-card">
+            <div class="settings-card-header">
+              <div>
+                <h3>Password &amp; Security</h3>
+                <p>Keep your account secure.</p>
+              </div>
+
+              <span class="card-icon">
+                <i class="fa-solid fa-shield-halved"></i>
+              </span>
+            </div>
+
+            <div class="security-notice">
+              <i class="fa-solid fa-lock"></i>
+              <div>
+                <strong>Protect your account</strong>
+                <p>Use a strong password that is difficult to guess.</p>
+              </div>
+            </div>
+
+            <form id="passwordForm">
+              <div class="form-group">
+                <label for="currentPassword">Current Password</label>
+
+                <div class="password-field">
+                  <input
+                    type="password"
+                    id="currentPassword"
+                    name="current_password"
+                    autocomplete="current-password"
+                    placeholder="Enter current password"
+                    required
+                  />
+
+                  <button
+                    type="button"
+                    class="toggle-password"
+                    data-input="currentPassword"
+                    aria-label="Show current password"
+                  >
+                    <i class="fa-regular fa-eye"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="settings-form-grid">
+                <div class="form-group">
+                  <label for="newPassword">New Password</label>
+
+                  <div class="password-field">
+                    <input
+                      type="password"
+                      id="newPassword"
+                      name="new_password"
+                      autocomplete="new-password"
+                      minlength="8"
+                      placeholder="Enter new password"
+                      required
+                    />
+
+                    <button
+                      type="button"
+                      class="toggle-password"
+                      data-input="newPassword"
+                      aria-label="Show new password"
+                    >
+                      <i class="fa-regular fa-eye"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="confirmPassword">Confirm New Password</label>
+
+                  <div class="password-field">
+                    <input
+                      type="password"
+                      id="confirmPassword"
+                      name="confirm_password"
+                      autocomplete="new-password"
+                      minlength="8"
+                      placeholder="Confirm new password"
+                      required
+                    />
+
+                    <button
+                      type="button"
+                      class="toggle-password"
+                      data-input="confirmPassword"
+                      aria-label="Show confirmed password"
+                    >
+                      <i class="fa-regular fa-eye"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="password-hint">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>
+                  Use at least 8 characters, including a letter, a number and a
+                  special character.
+                </span>
+              </div>
+
+              <div class="settings-actions">
+                <button type="submit" class="btn-primary">
+                  <i class="fa-solid fa-key"></i> Update Password
+                </button>
+              </div>
+            </form>
+
+            <div class="settings-divider"></div>
+
+            <div class="security-option">
+              <div class="option-icon">
+                <i class="fa-solid fa-user-shield"></i>
+              </div>
+
+              <div class="option-text">
+                <h4>Account Protection</h4>
+                <p>Always log out when using a shared computer.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Preferences -->
+        <section
+          class="settings-panel"
+          id="preferencesSection"
+          role="tabpanel"
+          hidden
+        >
+          <div class="settings-card">
+            <div class="settings-card-header">
+              <div>
+                <h3>Application Preferences</h3>
+                <p>Customize how you use SIMS.</p>
+              </div>
+
+              <span class="card-icon">
+                <i class="fa-solid fa-sliders"></i>
+              </span>
+            </div>
+
+            <form id="preferencesForm">
+              <div class="preference-item">
+                <div class="option-icon">
+                  <i class="fa-solid fa-boxes-stacked"></i>
+                </div>
+
+                <div class="option-text">
+                  <h4>Low Stock Alerts</h4>
+                  <p>
+                    Show alerts when products reach their minimum stock level.
+                  </p>
+                </div>
+
+                <label class="switch">
+                  <input type="checkbox" name="low_stock_alerts" />
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="settings-divider"></div>
+
+              <div class="preference-item">
+                <div class="option-icon">
+                  <i class="fa-solid fa-receipt"></i>
+                </div>
+
+                <div class="option-text">
+                  <h4>Sales Notifications</h4>
+                  <p>Enable notifications for completed sales.</p>
+                </div>
+
+                <label class="switch">
+                  <input type="checkbox" name="sales_notifications" />
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="settings-divider"></div>
+
+              <div class="preference-item">
+                <div class="option-icon">
+                  <i class="fa-solid fa-calendar-days"></i>
+                </div>
+
+                <div class="option-text">
+                  <h4>Date Format</h4>
+                  <p>Choose how dates appear throughout SIMS.</p>
+                </div>
+
+                <select name="date_format" class="preference-select">
+                  <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                  <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                  <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                </select>
+              </div>
+
+              <div class="settings-actions">
+                <button type="reset" class="btn-secondary">Reset</button>
+
+                <button type="submit" class="btn-primary">
+                  <i class="fa-solid fa-check"></i> Save Preferences
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div class="settings-footer-note">
+            <i class="fa-solid fa-circle-info"></i>
+            <span>Your preferences are saved to your account.</span>
+          </div>
+        </section>
+
+        <!-- Feedback -->
+        <p
+          class="settings-message"
+          id="settingsMessage"
+          role="status"
+          aria-live="polite"
+        ></p>
+      </main>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const sidebar = document.getElementById("sidebar");
+        const menuBtn = document.getElementById("menuBtn");
+        const closeBtn = document.getElementById("closeBtn");
+        const message = document.getElementById("settingsMessage");
+
+        const profileForm = document.getElementById("profileForm");
+        const passwordForm = document.getElementById("passwordForm");
+        const preferencesForm = document.getElementById("preferencesForm");
+
+        // Show feedback
+        function showMessage(text = "", type = "") {
+          if (!message) return;
+
+          message.textContent = text;
+          message.className = "settings-message";
+
+          if (type) {
+            message.classList.add(type);
+          }
+        }
+
+        // Handle API responses
+        async function readResponse(response) {
+          const data = await response.json().catch(() => ({}));
+
+          if (!response.ok || data.success !== true) {
+            throw new Error(
+              data.message || `Request failed (${response.status}).`,
+            );
+          }
+
+          return data;
+        }
+
+        // Mobile sidebar
+        function closeSidebar() {
+          sidebar?.classList.remove("show");
+        }
+
+        menuBtn?.addEventListener("click", (event) => {
+          event.stopPropagation();
+          sidebar?.classList.toggle("show");
+        });
+
+        closeBtn?.addEventListener("click", (event) => {
+          event.stopPropagation();
+          closeSidebar();
+        });
+
+        document.addEventListener("click", (event) => {
+          if (
+            window.innerWidth <= 768 &&
+            sidebar &&
+            menuBtn &&
+            !sidebar.contains(event.target) &&
+            !menuBtn.contains(event.target)
+          ) {
+            closeSidebar();
+          }
+        });
+
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape") closeSidebar();
+        });
+
+        // Settings tabs
+        const tabs = document.querySelectorAll(".settings-tab");
+        const panels = document.querySelectorAll(".settings-panel");
+
+        tabs.forEach((tab) => {
+          tab.addEventListener("click", () => {
+            tabs.forEach((item) => {
+              item.classList.remove("active");
+              item.setAttribute("aria-selected", "false");
+            });
+
+            panels.forEach((panel) => {
+              panel.classList.remove("active");
+              panel.hidden = true;
+            });
+
+            const target = document.getElementById(tab.dataset.target);
+
+            if (!target) return;
+
+            tab.classList.add("active");
+            tab.setAttribute("aria-selected", "true");
+            target.classList.add("active");
+            target.hidden = false;
+
+            showMessage();
+          });
+        });
+
+        // Show or hide passwords
+        document.querySelectorAll(".toggle-password").forEach((button) => {
+          button.addEventListener("click", () => {
+            const input = document.getElementById(button.dataset.input);
+            if (!input) return;
+
+            const icon = button.querySelector("i");
+            const showPassword = input.type === "password";
+
+            input.type = showPassword ? "text" : "password";
+
+            if (icon) {
+              icon.classList.toggle("fa-eye", showPassword);
+              icon.classList.toggle("fa-eye-slash", !showPassword);
+              icon.classList.remove("fa-regular");
+              icon.classList.add("fa-solid");
+            }
+
+            button.setAttribute(
+              "aria-label",
+              showPassword ? "Hide password" : "Show password",
+            );
+          });
+        });
+
+        // Load profile from Flask
+        async function loadProfile() {
+          if (!profileForm) return;
+
+          try {
+            const response = await fetch("/api/settings/profile");
+            const data = await readResponse(response);
+            const user = data.user || {};
+
+            document.getElementById("fullName").value = user.fullname || "";
+            document.getElementById("username").value = user.username || "";
+            document.getElementById("email").value = user.email || "";
+            document.getElementById("phone").value = user.phone || "";
+          } catch (error) {
+            console.error("Profile loading error:", error);
+            showMessage(
+              error.message || "Could not load your profile.",
+              "error",
+            );
+          }
+        }
+
+        // Save profile
+        profileForm?.addEventListener("submit", async (event) => {
+          event.preventDefault();
+
+          const fullName = document.getElementById("fullName").value.trim();
+          const username = document.getElementById("username").value.trim();
+          const email = document.getElementById("email").value.trim();
+          const phone = document.getElementById("phone").value.trim();
+
+          if (!fullName || !username || !email) {
+            showMessage(
+              "Please complete all required profile fields.",
+              "error",
+            );
+            return;
+          }
+
+          try {
+            const response = await fetch("/api/settings/profile", {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ fullName, username, email, phone }),
+            });
+
+            await readResponse(response);
+
+            document.getElementById("headerUserName").textContent = username;
+            document.getElementById("profilePreviewName").textContent =
+              fullName;
+            document.getElementById("headerAvatar").textContent = fullName
+              .charAt(0)
+              .toUpperCase();
+            document.getElementById("profileAvatar").textContent = fullName
+              .charAt(0)
+              .toUpperCase();
+
+            showMessage("Profile updated successfully.", "success");
+          } catch (error) {
+            console.error("Profile update error:", error);
+            showMessage(error.message || "Unable to update profile.", "error");
+          }
+        });
+
+        // Change password
+        passwordForm?.addEventListener("submit", async (event) => {
+          event.preventDefault();
+
+          const currentPassword =
+            document.getElementById("currentPassword").value;
+          const newPassword = document.getElementById("newPassword").value;
+          const confirmPassword =
+            document.getElementById("confirmPassword").value;
+
+          if (!currentPassword || !newPassword || !confirmPassword) {
+            showMessage("Please fill in all password fields.", "error");
+            return;
+          }
+
+          if (newPassword.length < 8) {
+            showMessage(
+              "Your new password must contain at least 8 characters.",
+              "error",
+            );
+            return;
+          }
+
+          if (
+            !/[a-zA-Z]/.test(newPassword) ||
+            !/[0-9]/.test(newPassword) ||
+            !/[^a-zA-Z0-9]/.test(newPassword)
+          ) {
+            showMessage(
+              "Include at least one letter, one number and one special character.",
+              "error",
+            );
+            return;
+          }
+
+          if (newPassword !== confirmPassword) {
+            showMessage("Your new passwords do not match.", "error");
+            return;
+          }
+
+          try {
+            const response = await fetch("/api/settings/password", {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                currentPassword,
+                newPassword,
+                confirmPassword,
+              }),
+            });
+
+            await readResponse(response);
+
+            passwordForm.reset();
+            showMessage("Password changed successfully.", "success");
+          } catch (error) {
+            console.error("Password change error:", error);
+            showMessage(error.message || "Unable to change password.", "error");
+          }
+        });
+
+        // Load saved preferences
+        async function loadPreferences() {
+          if (!preferencesForm) return;
+
+          try {
+            const response = await fetch("/api/settings/preferences");
+            const data = await readResponse(response);
+            const preferences = data.preferences || {};
+
+            preferencesForm.elements["low_stock_alerts"].checked = Boolean(
+              Number(preferences.low_stock_alerts ?? 1),
+            );
+
+            preferencesForm.elements["sales_notifications"].checked = Boolean(
+              Number(preferences.sales_notifications ?? 1),
+            );
+
+            preferencesForm.elements["date_format"].value =
+              preferences.date_format || "DD/MM/YYYY";
+          } catch (error) {
+            console.error("Preferences loading error:", error);
+            showMessage(
+              error.message || "Could not load saved preferences.",
+              "error",
+            );
+          }
+        }
+
+        // Save preferences
+        preferencesForm?.addEventListener("submit", async (event) => {
+          event.preventDefault();
+
+          const preferences = {
+            low_stock_alerts:
+              preferencesForm.elements["low_stock_alerts"].checked,
+            sales_notifications:
+              preferencesForm.elements["sales_notifications"].checked,
+            date_format: preferencesForm.elements["date_format"].value,
+          };
+
+          try {
+            const response = await fetch("/api/settings/preferences", {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(preferences),
+            });
+
+            const data = await readResponse(response);
+            showMessage(
+              data.message || "Preferences saved successfully.",
+              "success",
+            );
+          } catch (error) {
+            console.error("Preferences saving error:", error);
+            showMessage(
+              error.message || "Unable to save preferences.",
+              "error",
+            );
+          }
+        });
+
+        // Reset forms to the latest saved values
+        profileForm?.addEventListener("reset", () => {
+          window.setTimeout(() => {
+            loadProfile();
+            showMessage();
+          }, 0);
+        });
+
+        preferencesForm?.addEventListener("reset", () => {
+          window.setTimeout(() => {
+            loadPreferences();
+            showMessage();
+          }, 0);
+        });
+
+        passwordForm?.addEventListener("reset", () => showMessage());
+
+        // Initial loading
+        loadProfile();
+        loadPreferences();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Signup Page</title>
+ <link
+      rel="stylesheet"
+      href="{{url_for('static', filename = 'css/style.css')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', filename = 'css/login.css')}}"
+    />
+     <link
+      rel="stylesheet"
+      href="{{url_for('static', filename = 'css/signup.css')}}"
+    />
+    <script
+      src="https://kit.fontawesome.com/1f15ce75ba.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div class="login-container">
+      <h2>Sign-Up Form</h2>
+      <span>Stock & Inventory Management System</span>
+      <form action="#" id="form">
+        <div class="input">
+          <div class="user">
+            <i class="fa-regular fa-user"></i>
+            <input type="text" placeholder="username" id="username" />
+          </div>
+          <!-- username that we fetch from database when we need to check account -->
+          <div class="user">
+            <i class="fa-regular fa-user"></i>
+            <input type="text" placeholder="First Name" id="name" />
+          </div>
+          <div class="email">
+            <i class="fa-regular fa-envelope"></i>
+            <input
+              type="text"
+              id="email"
+              placeholder="Email Address"
+              required
+            />
+          </div>
+          <div class="tel">
+            <i class="fa-solid fa-phone"></i>
+            <input type="tel" placeholder="Phone No" id="phone" />
+          </div>
+          <div class="password">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" placeholder="password" id="password" />
+          </div>
+          <div class="password">
+            <i class="fa-solid fa-lock"></i>
+            <input
+              type="text"
+              placeholder="Confirm Password"
+              id="con-password"
+            />
+          </div>
+        </div>
+        <div class="password-req">
+          <span id="lengthCheck">length must be > 7,&nbsp; </span>
+          <span id="letterCheck"> atleast 1 letter,&nbsp; </span>
+          <span id="digitCheck"> at least 1 digit, &nbsp;</span>
+          <span id="specialChar">atleast 1 special character</span>
+        </div>
+        <div class="checkbox">
+          <input type="checkbox" id="check" /><label for="#"
+            >Agreed with Terms and Conditions</label
+          >
+        </div>
+        <button type="submit">SIGN UP</button>
+        <p id="errorMessage"></p>
+        <p>Already have an account <a href="/login">Login Now</a></p>
+      </form>
+    </div>
+  </body>
+  <script>
+    let form = document.getElementById("form");
+    let username = document.getElementById("username");
+    let name = document.getElementById("name");
+    let email = document.getElementById("email");
+    let phone = document.getElementById("phone");
+    let password = document.getElementById("password");
+    let con_password = document.getElementById("con-password");
+    let check = document.getElementById("check");
+    let errorMessage = document.getElementById("errorMessage");
+
+    let length = document.getElementById("lengthCheck");
+    let letter = document.getElementById("letterCheck");
+    let digit = document.getElementById("digitCheck");
+    let special = document.getElementById("specialChar");
+
+    password.addEventListener("input", function () {
+      let value = password.value;
+      if (value.length > 7) {
+        length.style.color = "green";
+      }
+      if (/[a-zA-Z]/.test(value)) {
+        letter.style.color = "green";
+      }
+
+      if (/[0-9]/.test(value)) {
+        digit.style.color = "green";
+      }
+      if (/[^a-zA-ZA-Z,0-9]/.test(value)) {
+        special.style.color = "green";
+      }
+    });
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      errorMessage.innerHTML = "";
+      if (
+        username.value == "" ||
+        name.value == "" ||
+        email.value == "" ||
+        password.value == "" ||
+        con_password.value == ""
+      ) {
+        errorMessage.innerHTML =
+          "Invalid Entities. Fill out all the required fields";
+          return
+      }
+      if (password.value < 7) {
+        length.innerHTML = "password must be > 7 characters";
+      }
+      if (password.value != con_password.value) {
+        errorMessage.innerHTML = "Pasword don't match";
+        return
+      }
+      if (check.checked == false) {
+        errorMessage.innerHTML = "Please check the terms and conditions";
+        return
+      }
+
+      // authentication
+      let signupData = {
+        fullname: name.value,
+        username: username.value,
+        email: email.value,
+        phone: phone.value,
+        password: password.value,
+      };
+
+      // sends request to flask
+      let response = await fetch("/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(signupData),
+      });
+
+      let data = await response.json();
+
+      if (data.success) {
+        errorMessage.style.color = "green";
+        errorMessage.innerHTML = data.message;
+        form.reset();
+
+setTimeout(function () {
+            window.location.href = "/login";
+          }, 1000);
+        } else {
+        errorMessage.style.color = "red";
+        errorMessage.innerHTML = data.message;
+      }
+    });
+  </script>
+</html>

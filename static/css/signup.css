@@ -1,0 +1,55 @@
+
+      .login-container form {
+        width: 520px !important;
+      }
+      .login-container form .input {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+
+      .login-container form .input > div {
+        width: 100%;
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+      .login-container form .input input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 13px 40px;
+        font-size: 14px;
+        transition: 0.3s ease;
+      }
+      .login-container form .input i {
+        position: absolute;
+        left: 14px;
+        color: var(--color-1);
+        z-index: 1;
+      }
+
+      .login-container form .input .tel .fa-phone {
+        rotate: 15deg;
+      }
+      .login-container form .input .password .fa-lock {
+        bottom: 15px;
+      }
+      .login-container form .input .email .fa-envelope {
+        bottom: 15px;
+      }
+      .password-req {
+        margin-top: 20px;
+        color: rgba(0, 0, 0, 0.566);
+        display: block;
+        white-space: nowrap;
+        margin-bottom: 10px;
+      }
+      .password-req span {
+        font-size: 13px;
+      }
+      .login-container form button {
+        width: 480px;
+        height: 40px;
+        margin-top: 10px;
+      }
+ 

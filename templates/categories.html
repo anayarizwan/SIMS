@@ -1,0 +1,754 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale = 1.0, user-scalable = no" />
+<script
+  src="https://kit.fontawesome.com/1f15ce75ba.js"
+  crossorigin="anonymous"
+></script>
+
+<title>Categories - SIMS</title>
+
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/dashboard.css') }}"
+/>
+
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/categories.css') }}"
+/>
+
+  </head>
+
+  <body>
+    <!-- =========================================================
+       SIDEBAR
+  ========================================================== -->
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <button class="close-btn" id="closeBtn">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+
+    <div class="brand">
+      <h1>SIMS</h1>
+      <p>Smart and Inventory Management System</p>
+    </div>
+
+    <ul class="nav-menu">
+      <li class="nav-item ">
+        <a href="/dashboard"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
+      </li>
+    </ul>
+
+    <div class="nav-section">Inventory</div>
+    <ul class="nav-menu">
+      <li class="nav-item">
+        <a href="/products"><i class="fa-solid fa-box"></i> Products</a>
+      </li>
+      <li class="nav-item active">
+        <a href="/categories"><i class="fa-solid fa-tags"></i> Categories</a>
+      </li>
+      <li class="nav-item">
+        <a href="/stock"><i class="fa-solid fa-warehouse"></i> Stock</a>
+      </li>
+    </ul>
+
+    <div class="nav-section">Sales</div>
+    <ul class="nav-menu">
+      <li class="nav-item">
+        <a href="/sales"><i class="fa-solid fa-cart-plus"></i> New Sale</a>
+      </li>
+      <li class="nav-item">
+        <a href="sales-history"><i class="fa-solid fa-clock-rotate-left"></i> Sales History</a>
+      </li>
+      <li class="nav-item">
+        <a href="/customers"><i class="fa-solid fa-users"></i> Customers</a>
+      </li>
+      <li class="nav-item">
+        <a href="/settings"><i class="fa-solid fa-gear"></i> Settings</a>
+      </li>
+    </ul>
+
+    <a href="/login" class="logout-btn">
+      <i class="fa-solid fa-right-from-bracket"></i> Logout
+    </a>
+  </aside>
+
+<!-- =========================================================
+   MAIN WRAPPER
+
+
+========================================================== -->
+
+
+<div class="main-wrapper">
+
+  <!-- =======================================================
+   TOP HEADER
+  ======================================================== -->
+
+  <header class="top-header">
+    <button class="menu-btn" id="menuBtn" type="button">
+      <i class="fa-solid fa-ellipsis-vertical"></i>
+    </button>
+
+    <div class="header-page-info">
+      <span class="header-label">INVENTORY</span>
+
+      <h1>Categories</h1>
+
+      <p>Manage your business product categories</p>
+    </div>
+
+    <div class="user-profile">
+      <button class="icon-btn">
+        <i class="fa-regular fa-bell"></i>
+      </button>
+
+      <div class="avatar-circle">{{ full_name[0].upper() }}</div>
+
+      <div class="user-info">
+        <span class="user-name">{{ full_name }}</span>
+        <span class="user-role">Administrator</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- =======================================================
+   CONTENT
+  ======================================================== -->
+
+  <main class="content-area categories-content">
+
+    <!-- =====================================================
+   PAGE HEADER
+    ====================================================== -->
+
+    <div class="category-page-header">
+      <div>
+        <span class="page-eyebrow">CATEGORY MANAGEMENT</span>
+
+        <h2>Organize Your Inventory</h2>
+
+        <p>Create, edit and manage categories for your products.</p>
+      </div>
+
+      <button
+        class="primary-category-btn"
+        id="openAddModal"
+        type="button"
+      >
+        <i class="fa-solid fa-plus"></i>
+        Add Category
+      </button>
+    </div>
+
+    <!-- =====================================================
+   STATISTICS
+    ====================================================== -->
+
+    <div class="category-stats">
+
+      <div class="category-stat-card">
+        <div class="category-stat-icon">
+          <i class="fa-solid fa-layer-group"></i>
+        </div>
+
+        <div class="category-stat-content">
+          <span>Total Categories</span>
+          <strong id="totalCategories">0</strong>
+        </div>
+      </div>
+
+      <div class="category-stat-card">
+        <div class="category-stat-icon">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+
+        <div class="category-stat-content">
+          <span>Active Categories</span>
+          <strong id="activeCategories">0</strong>
+        </div>
+      </div>
+
+      <div class="category-stat-card">
+        <div class="category-stat-icon">
+          <i class="fa-solid fa-circle-xmark"></i>
+        </div>
+
+        <div class="category-stat-content">
+          <span>Inactive Categories</span>
+          <strong id="inactiveCategories">0</strong>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- =====================================================
+   CATEGORY TABLE CARD
+    ====================================================== -->
+
+    <section class="category-table-card">
+
+      <div class="category-table-header">
+        <div>
+          <h3>All Categories</h3>
+          <p>View and manage all available product categories.</p>
+        </div>
+
+        <div class="category-table-tools">
+
+          <div class="category-search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Search categories..."
+            />
+          </div>
+
+          <select id="statusFilter">
+            <option value="all">All Status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+
+        </div>
+      </div>
+
+      <!-- =================================================
+   TABLE
+      ================================================== -->
+
+      <div class="category-table-wrapper">
+        <table class="category-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Category Name</th>
+              <th>Description</th>
+              <th>Status</th>
+              <th>Created</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody id="categoryTableBody"></tbody>
+        </table>
+      </div>
+
+      <!-- =================================================
+     EMPTY STATE
+      ================================================== -->
+
+      <div class="category-empty-state" id="emptyState">
+        <div class="empty-state-icon">
+          <i class="fa-solid fa-folder-open"></i>
+        </div>
+
+        <h3>No Categories Found</h3>
+
+        <p>
+          Create your first category to start organizing your inventory.
+        </p>
+
+        <button
+          class="primary-category-btn"
+          id="emptyAddBtn"
+          type="button"
+        >
+          <i class="fa-solid fa-plus"></i>
+          Add Category
+        </button>
+      </div>
+
+    </section>
+  </main>
+</div>
+
+<!-- =========================================================
+   ADD / EDIT CATEGORY MODAL
+========================================================== -->
+
+<div class="modal-overlay" id="categoryModal">
+  <div class="category-modal">
+
+    <div class="category-modal-header">
+      <div>
+        <span class="modal-eyebrow">CATEGORY</span>
+
+        <h2 id="modalTitle">Add Category</h2>
+
+        <p id="modalDescription">
+          Create a new product category.
+        </p>
+      </div>
+
+      <button
+        class="modal-close-btn"
+        type="button"
+        onclick="closeCategoryModal()"
+      >
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <form id="categoryForm">
+      <input type="hidden" id="categoryId" />
+
+      <div class="category-form-group">
+        <label for="categoryName">Category Name</label>
+
+        <div class="category-input-wrapper">
+          <i class="fa-solid fa-tag"></i>
+
+          <input
+            type="text"
+            id="categoryName"
+            placeholder="e.g. Electronics"
+            required
+          />
+        </div>
+
+        <small>Category name must be unique.</small>
+      </div>
+
+      <div class="category-form-group">
+        <label for="categoryDescription">Description</label>
+
+        <textarea
+          id="categoryDescription"
+          rows="4"
+          placeholder="Enter category description..."
+        ></textarea>
+      </div>
+
+      <div class="category-form-group">
+        <label for="categoryStatus">Status</label>
+
+        <select id="categoryStatus">
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+      </div>
+
+      <div class="category-modal-actions">
+        <button
+          type="button"
+          class="secondary-category-btn"
+          id="cancelBtn"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="primary-category-btn"
+          id="saveCategoryBtn"
+        >
+          <i class="fa-solid fa-check"></i>
+          Add Category
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+<!-- =========================================================
+   DELETE MODAL
+========================================================== -->
+
+<div class="modal-overlay" id="deleteModal">
+  <div class="category-modal delete-category-modal">
+
+    <div class="delete-modal-icon">
+      <i class="fa-solid fa-trash-can"></i>
+    </div>
+
+    <h2>Delete Category?</h2>
+
+    <p>
+      Are you sure you want to delete
+      <strong id="deleteCategoryName"></strong>?
+    </p>
+
+    <span class="delete-warning">
+      This action cannot be undone.
+    </span>
+
+    <div class="category-modal-actions">
+      <button
+        type="button"
+        class="secondary-category-btn"
+        id="cancelDelete"
+      >
+        Cancel
+      </button>
+
+      <button
+        type="button"
+        class="danger-category-btn"
+        id="confirmDelete"
+      >
+        <i class="fa-solid fa-trash"></i>
+        Delete
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- =========================================================
+   TOAST
+========================================================== -->
+
+<div class="category-toast" id="toast">
+  <div class="toast-icon">
+    <i class="fa-solid fa-check"></i>
+  </div>
+
+  <div>
+    <strong id="toastTitle">Success</strong>
+    <p id="toastMessage">Operation completed successfully.</p>
+  </div>
+</div>
+
+<script>
+  const categoryTableBody = document.getElementById("categoryTableBody");
+const categoryModal = document.getElementById("categoryModal");
+const deleteModal = document.getElementById("deleteModal");
+const categoryForm = document.getElementById("categoryForm");
+const categoryId = document.getElementById("categoryId");
+const categoryName = document.getElementById("categoryName");
+const categoryDescription = document.getElementById("categoryDescription");
+const categoryStatus = document.getElementById("categoryStatus");
+const modalTitle = document.getElementById("modalTitle");
+const modalDescription = document.getElementById("modalDescription");
+const saveCategoryBtn = document.getElementById("saveCategoryBtn");
+const deleteCategoryName = document.getElementById("deleteCategoryName");
+const searchInput = document.getElementById("searchInput");
+const statusFilter = document.getElementById("statusFilter");
+
+let allCategories = [];
+
+document.getElementById("openAddModal").addEventListener("click", () => {
+  categoryForm.reset();
+  categoryId.value = "";
+  modalTitle.textContent = "Add Category";
+  modalDescription.textContent = "Create a new product category.";
+  saveCategoryBtn.innerHTML = '<i class="fa-solid fa-check"></i> Add Category';
+  categoryModal.classList.add("show");
+  categoryName.focus();
+});
+
+document.getElementById("emptyAddBtn").addEventListener("click", () => {
+  categoryForm.reset();
+  categoryId.value = "";
+  modalTitle.textContent = "Add Category";
+  modalDescription.textContent = "Create a new product category.";
+  saveCategoryBtn.innerHTML = '<i class="fa-solid fa-check"></i> Add Category';
+  categoryModal.classList.add("show");
+  categoryName.focus();
+});
+
+function closeCategoryModal() {
+  categoryModal.classList.remove("show");
+  categoryForm.reset();
+}
+
+document
+  .getElementById("cancelBtn")
+  .addEventListener("click", closeCategoryModal);
+
+async function loadCategories() {
+  try {
+    const response = await fetch("/api/categories");
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to load categories");
+    }
+
+    allCategories = data.categories;
+    displayCategories(allCategories);
+  } catch (error) {
+    showToast("Error", error.message);
+  }
+}
+
+function displayCategories(categories) {
+  const totalCategories = categories.length;
+
+  const activeCategories = categories.filter(
+    (category) => category.status === "active"
+  ).length;
+
+  const inactiveCategories = totalCategories - activeCategories;
+
+  document.getElementById("totalCategories").textContent = totalCategories;
+  document.getElementById("activeCategories").textContent = activeCategories;
+  document.getElementById("inactiveCategories").textContent =
+    inactiveCategories;
+
+  categoryTableBody.innerHTML = "";
+
+  const emptyState = document.getElementById("emptyState");
+
+  if (categories.length === 0) {
+    emptyState.style.display = "block";
+  } else {
+    emptyState.style.display = "none";
+  }
+
+  categories.forEach((category) => {
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+      <td>#${category.id}</td>
+      <td><strong>${category.name}</strong></td>
+      <td>${category.description || "No description"}</td>
+      <td>
+        <span class="status ${category.status}">
+          ${category.status}
+        </span>
+      </td>
+      <td>${category.created_at}</td>
+      <td>
+        <div class="action-buttons">
+          <button
+            class="action-btn"
+            onclick="editCategory(${category.id})"
+            type="button"
+          >
+            <i class="fa-solid fa-pen"></i>
+          </button>
+
+          <button
+            class="action-btn delete"
+            onclick="openDeleteModal(${category.id}, '${escapeHtml(category.name)}')"
+            type="button"
+          >
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </div>
+      </td>
+    `;
+
+    categoryTableBody.appendChild(row);
+  });
+}
+
+function filterCategories() {
+  const searchValue = searchInput.value.toLowerCase().trim();
+  const statusValue = statusFilter.value;
+
+  const filteredCategories = allCategories.filter((category) => {
+    const categoryName = (category.name || "").toLowerCase();
+    const categoryDescription = (
+      category.description || ""
+    ).toLowerCase();
+
+    const matchesSearch =
+      categoryName.includes(searchValue) ||
+      categoryDescription.includes(searchValue);
+
+    const matchesStatus =
+      statusValue === "all" ||
+      category.status.toLowerCase() === statusValue;
+
+    return matchesSearch && matchesStatus;
+  });
+
+  displayCategories(filteredCategories);
+}
+
+searchInput.addEventListener("input", filterCategories);
+
+statusFilter.addEventListener("change", filterCategories);
+
+// add update categories
+categoryForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const name = categoryName.value.trim();
+  const description = categoryDescription.value.trim();
+  const status = categoryStatus.value;
+  const id = categoryId.value;
+
+  if (!name) {
+    showToast("Error", "Category name is required");
+    categoryName.focus();
+    return;
+  }
+
+  const categoryData = {
+    name: name,
+    description: description,
+    status: status
+  };
+
+  try {
+    let response;
+
+    if (id) {
+      response = await fetch(`/api/categories/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(categoryData)
+      });
+    } else {
+      response = await fetch("/api/categories", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(categoryData)
+      });
+    }
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to save category");
+    }
+
+    closeCategoryModal();
+
+    showToast("Success", data.message);
+
+    loadCategories();
+  } catch (error) {
+    console.error("Category save error:", error);
+    showToast("Error", error.message);
+  }
+});
+
+// edit category
+async function editCategory(id) {
+  try {
+    const response = await fetch(`/api/categories/${id}`);
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to load category");
+    }
+
+    const category = data.category;
+
+    categoryId.value = category.id;
+    categoryName.value = category.name;
+    categoryDescription.value = category.description || "";
+    categoryStatus.value = category.status;
+
+    modalTitle.textContent = "Edit Category";
+    modalDescription.textContent = "Update category information.";
+    saveCategoryBtn.innerHTML =
+      '<i class="fa-solid fa-check"></i> Update Category';
+
+    categoryModal.classList.add("show");
+    categoryName.focus();
+  } catch (error) {
+    console.error(error);
+    showToast("Error", error.message);
+  }
+}
+
+// delete modal
+let categoryToDelete = null;
+
+function openDeleteModal(id, name) {
+  categoryToDelete = id;
+  deleteCategoryName.textContent = name;
+  deleteModal.classList.add("show");
+}
+
+// cancel delete
+document
+  .getElementById("cancelDelete")
+  .addEventListener("click", () => {
+    categoryToDelete = null;
+    deleteModal.classList.remove("show");
+  });
+
+// delete category
+document
+  .getElementById("confirmDelete")
+  .addEventListener("click", async () => {
+    if (!categoryToDelete) {
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `/api/categories/${categoryToDelete}`,
+        {
+          method: "DELETE"
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || "Failed to Delete Category"
+        );
+      }
+
+      deleteModal.classList.remove("show");
+      categoryToDelete = null;
+
+      showToast("Success", data.message);
+      loadCategories();
+    } catch (error) {
+      console.error(error);
+      showToast("Error", error.message);
+    }
+  });
+
+// toast
+function showToast(title, message) {
+  const toast = document.getElementById("toast");
+  const toastTitle = document.getElementById("toastTitle");
+  const toastMessage = document.getElementById("toastMessage");
+
+  toastTitle.textContent = title;
+  toastMessage.textContent = message;
+  toast.classList.add("show");
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 3000);
+}
+
+// HTML ESCAPE
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+// Mobile Sidebar
+document.getElementById("menuBtn").addEventListener("click", () => {
+  document.getElementById("sidebar").classList.add("active");
+});
+
+document.getElementById("closeBtn").addEventListener("click", () => {
+  document.getElementById("sidebar").classList.remove("active");
+});
+
+loadCategories();
+</script>
+  </body>
+</html>

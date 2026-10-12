@@ -1,0 +1,8 @@
+Flask
+request
+jsonify
+render_template
+werkzueg.security
+mysql.connector
+
+pip install -r requirements.txt

@@ -1,0 +1,890 @@
+/* =========================================================
+   SALES PAGE
+========================================================= */
+
+.sales-content {
+  padding: 32px;
+}
+
+/* =========================================================
+   TOP HEADER
+========================================================= */
+
+.header-page-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.header-label {
+  display: none;
+}
+
+.header-page-info h1 {
+  font-family: var(--f1);
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--color-1);
+}
+
+.header-page-info p {
+  margin-top: 2px;
+  color: var(--color-5);
+  font-size: 11px;
+}
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.sales-page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.page-eyebrow {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--color-2);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.sales-page-header h2 {
+  font-family: var(--f1);
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--color-1);
+}
+
+.sales-page-header p {
+  margin-top: 5px;
+  color: var(--color-5);
+  font-size: 13px;
+}
+
+/* =========================================================
+   SALE CARD
+========================================================= */
+
+.sale-card {
+  background: var(--color-4);
+  border: 1px solid #e5e9ef;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 3px 14px rgba(15, 23, 42, 0.025);
+}
+
+/* =========================================================
+   SECTION HEADER
+========================================================= */
+
+.sale-section-header {
+  padding: 22px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 1px solid #edf0f4;
+}
+
+.sale-section-header h3 {
+  color: var(--color-1);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.sale-section-header p {
+  margin-top: 5px;
+  color: var(--color-5);
+  font-size: 11px;
+}
+
+.sale-header-icon,
+.items-count {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 9px;
+  background: #eef2ff;
+  color: var(--color-2);
+  font-size: 14px;
+}
+.sales-page-header h2 {
+  font-weight: 400;
+}
+/* =========================================================
+   FORM
+========================================================= */
+
+.sale-form-group {
+  min-width: 0;
+}
+
+.customer-group {
+  padding: 22px 24px;
+  border-bottom: 1px solid #edf0f4;
+}
+
+.sale-form-group label {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--color-1);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.select-wrapper,
+.input-wrapper {
+  position: relative;
+}
+
+.select-wrapper i,
+.input-wrapper i {
+  position: absolute;
+  top: 50%;
+  left: 13px;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.sale-form-group select,
+.sale-form-group input {
+  width: 100%;
+  height: 42px;
+  padding: 0 12px 0 36px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  outline: none;
+  background: #f8fafc;
+  color: var(--color-1);
+  font-family: var(--f2);
+  font-size: 12px;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.sale-form-group select {
+  cursor: pointer;
+  appearance: auto;
+}
+
+.sale-form-group select:focus,
+.sale-form-group input:focus {
+  border-color: var(--color-2);
+  background: var(--color-4);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.08);
+}
+
+/* =========================================================
+   PRODUCT ROW
+========================================================= */
+
+.sale-product-row {
+  padding: 22px 24px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 150px auto;
+  align-items: end;
+  gap: 14px;
+  border-bottom: 1px solid #edf0f4;
+}
+
+.add-item-container {
+  display: flex;
+  align-items: flex-end;
+}
+
+.btn-primary {
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 18px;
+  border: 1px solid var(--color-2);
+  border-radius: 8px;
+  background: var(--color-2);
+  color: #ffffff;
+  font-family: var(--f2);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: #4f46e5;
+  border-color: #4f46e5;
+  box-shadow: 0 5px 12px rgba(79, 70, 229, 0.15);
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+/* =========================================================
+   SALE ITEMS
+========================================================= */
+
+.sale-items-section {
+  border-bottom: 1px solid #edf0f4;
+}
+
+.sale-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.sale-table {
+  width: 100%;
+  min-width: 850px;
+  border-collapse: collapse;
+  border-spacing: 0;
+  table-layout: fixed;
+}
+
+.sale-table th,
+.sale-table td {
+  box-sizing: border-box;
+  border-left: none !important;
+  border-right: none !important;
+}
+
+/* COLUMN WIDTHS */
+
+.sale-table th:nth-child(1),
+.sale-table td:nth-child(1) {
+  width: 24%;
+}
+
+.sale-table th:nth-child(2),
+.sale-table td:nth-child(2) {
+  width: 14%;
+}
+
+.sale-table th:nth-child(3),
+.sale-table td:nth-child(3) {
+  width: 13%;
+}
+
+.sale-table th:nth-child(4),
+.sale-table td:nth-child(4) {
+  width: 15%;
+}
+
+.sale-table th:nth-child(5),
+.sale-table td:nth-child(5) {
+  width: 15%;
+}
+
+.sale-table th:nth-child(6),
+.sale-table td:nth-child(6) {
+  width: 19%;
+}
+
+/* =========================================================
+   TABLE HEAD
+========================================================= */
+
+.sale-table th {
+  padding: 14px 14px;
+  text-align: left;
+  background: #f8fafc;
+  border: none;
+  border-bottom: 1px solid #e1e6ed;
+  color: #64748b;
+  font-family: var(--f2);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   TABLE CELLS
+========================================================= */
+
+.sale-table td {
+  padding: 15px 14px;
+  color: var(--color-5);
+  font-family: var(--f2);
+  font-size: 11px;
+  font-weight: 500;
+  vertical-align: middle;
+  line-height: 1.5;
+  border: none;
+  border-bottom: 1px solid #edf0f4;
+}
+
+.sale-table tbody tr {
+  background: var(--color-4);
+  transition: background-color 0.2s ease;
+}
+
+.sale-table tbody tr:hover {
+  background: #fafbfc;
+}
+
+.sale-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.sale-table td:first-child {
+  color: var(--color-1);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.sale-table td:nth-child(2) {
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.sale-table td:nth-child(3) {
+  color: var(--color-1);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.sale-table td:nth-child(4),
+.sale-table td:nth-child(5) {
+  color: var(--color-1);
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.sale-table th:last-child,
+.sale-table td:last-child {
+  text-align: center;
+}
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.sale-empty-state {
+  min-height: 210px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 35px 20px;
+  text-align: center;
+}
+
+.sale-empty-icon {
+  width: 58px;
+  height: 58px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background: #f1f5f9;
+  color: #94a3b8;
+  font-size: 21px;
+}
+
+.sale-empty-state h4 {
+  margin: 0;
+  color: var(--color-1);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.sale-empty-state p {
+  margin-top: 5px;
+  color: var(--color-5);
+  font-size: 10px;
+}
+
+/* =========================================================
+   SALE SUMMARY
+========================================================= */
+
+.sale-summary {
+  width: 390px;
+  max-width: calc(100% - 48px);
+  margin: 24px 24px 24px auto;
+  padding: 20px;
+  border: 1px solid #e5e9ef;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+/* =========================================================
+   SUMMARY HEADER
+========================================================= */
+
+.summary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #e5e9ef;
+}
+
+.summary-header span {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--color-2);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+}
+
+.summary-header h3 {
+  color: var(--color-1);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.summary-header > i {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: #eef2ff;
+  color: var(--color-2);
+  font-size: 13px;
+}
+
+/* =========================================================
+   SUMMARY ROW
+========================================================= */
+
+.summary-row {
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.summary-row > span,
+.summary-row > label {
+  color: var(--color-5);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.summary-row strong {
+  color: var(--color-1);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* =========================================================
+   DISCOUNT
+========================================================= */
+
+.discount-row {
+  margin-top: 3px;
+}
+
+.discount-input {
+  width: 100px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  border: 1px solid #e1e6ed;
+  border-radius: 7px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.discount-input input {
+  width: 100%;
+  height: 100%;
+  padding: 0 7px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--color-1);
+  font-family: var(--f2);
+  font-size: 11px;
+  text-align: right;
+}
+
+.discount-input span {
+  padding-right: 8px;
+  color: #94a3b8;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* =========================================================
+   SUMMARY DIVIDER
+========================================================= */
+
+.summary-divider {
+  height: 1px;
+  margin: 10px 0;
+  background: #e1e6ed;
+}
+
+/* =========================================================
+   GRAND TOTAL
+========================================================= */
+
+.grand-total {
+  min-height: 48px;
+}
+
+.grand-total span {
+  color: var(--color-1);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.grand-total strong {
+  color: var(--color-2);
+  font-size: 21px;
+  font-weight: 700;
+}
+
+/* =========================================================
+   COMPLETE SALE
+========================================================= */
+
+.complete-sale-btn {
+  width: 100%;
+  height: 42px;
+  margin-top: 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid var(--color-2);
+  border-radius: 8px;
+  background: var(--color-2);
+  color: #ffffff;
+  font-family: var(--f2);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.complete-sale-btn:hover {
+  background: #4f46e5;
+  border-color: #4f46e5;
+  box-shadow: 0 5px 12px rgba(79, 70, 229, 0.15);
+}
+
+.complete-sale-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+  .sales-content {
+    padding: 20px 14px;
+  }
+
+  .top-header {
+    position: relative;
+  }
+
+  .menu-btn {
+    display: inline-flex;
+  }
+
+  .header-page-info h1 {
+    font-size: 19px;
+  }
+
+  .header-page-info p {
+    font-size: 10px;
+  }
+
+  .user-profile {
+    gap: 8px;
+  }
+
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .user-name {
+    font-size: 11px;
+  }
+
+  .user-role {
+    font-size: 9px;
+  }
+
+  .avatar-circle {
+    width: 34px;
+    height: 34px;
+    font-size: 12px;
+  }
+
+  /* SIDEBAR */
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    width: 250px;
+    height: 100vh;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+  }
+
+  .sidebar.active {
+    transform: translateX(0);
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 18px;
+    right: 15px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 7px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 15px;
+  }
+
+  .close-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  /* PAGE HEADER */
+
+  .sales-page-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .page-eyebrow {
+    margin-bottom: 5px;
+    font-size: 9px;
+    letter-spacing: 1.2px;
+  }
+
+  .sales-page-header h2 {
+    font-size: 25px;
+  }
+
+  .sales-page-header p {
+    max-width: 300px;
+    font-size: 11px;
+    line-height: 1.5;
+  }
+
+  /* SALE CARD */
+
+  .sale-card {
+    border-radius: 10px;
+  }
+
+  /* SECTION HEADER */
+
+  .sale-section-header {
+    padding: 16px;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .sale-section-header h3 {
+    font-size: 14px;
+  }
+
+  .sale-section-header p {
+    font-size: 10px;
+    line-height: 1.5;
+  }
+
+  .sale-header-icon,
+  .items-count {
+    width: 34px;
+    height: 34px;
+    font-size: 12px;
+  }
+
+  /* CUSTOMER */
+
+  .customer-group {
+    padding: 16px;
+  }
+
+  .sale-form-group label {
+    font-size: 11px;
+  }
+
+  .sale-form-group select,
+  .sale-form-group input {
+    height: 40px;
+    font-size: 11px;
+  }
+
+  /* PRODUCT */
+
+  .sale-product-row {
+    padding: 16px;
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .add-item-container {
+    width: 100%;
+  }
+
+  .btn-primary {
+    width: 100%;
+    height: 40px;
+    font-size: 11px;
+  }
+
+  /* TABLE */
+
+  .sale-table-wrapper {
+    overflow-x: auto;
+  }
+
+  .sale-table {
+    min-width: 850px;
+  }
+
+  .sale-table th {
+    padding: 11px 10px;
+    font-size: 9px;
+  }
+
+  .sale-table td {
+    padding: 12px 10px;
+    font-size: 10px;
+  }
+
+  .sale-table td:first-child {
+    font-size: 11px;
+  }
+
+  .sale-table td:nth-child(2) {
+    font-size: 9px;
+  }
+
+  /* EMPTY */
+
+  .sale-empty-state {
+    min-height: 180px;
+    padding: 30px 16px;
+  }
+
+  .sale-empty-icon {
+    width: 52px;
+    height: 52px;
+    margin-bottom: 12px;
+    font-size: 19px;
+  }
+
+  .sale-empty-state h4 {
+    font-size: 11px;
+  }
+
+  .sale-empty-state p {
+    font-size: 9px;
+  }
+
+  /* SUMMARY */
+
+  .sale-summary {
+    width: auto;
+    max-width: none;
+    margin: 16px;
+    padding: 16px;
+    border-radius: 9px;
+  }
+
+  .summary-header {
+    padding-bottom: 13px;
+    margin-bottom: 12px;
+  }
+
+  .summary-header h3 {
+    font-size: 13px;
+  }
+
+  .summary-header > i {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+
+  .summary-row > span,
+  .summary-row > label {
+    font-size: 10px;
+  }
+
+  .summary-row strong {
+    font-size: 11px;
+  }
+
+  .discount-input {
+    width: 90px;
+    height: 32px;
+  }
+
+  .grand-total {
+    min-height: 44px;
+  }
+
+  .grand-total span {
+    font-size: 12px;
+  }
+
+  .grand-total strong {
+    font-size: 19px;
+  }
+
+  .complete-sale-btn {
+    height: 40px;
+    margin-top: 13px;
+    font-size: 10px;
+  }
+}
